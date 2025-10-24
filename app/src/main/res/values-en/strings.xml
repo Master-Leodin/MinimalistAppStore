@@ -21,15 +21,8 @@
     <string name="nome_do_app">App Name</string>
     <string name="nome_do_desenvolvedor">Developer: Leon</string>
 
-    <!-- ... strings existentes ... -->
-
     <!-- App Content -->
-    <string name="app_focus_zen_name">Focus Zen</string>
-    <string name="app_focus_zen_description">A minimalist timer for the Pomodoro technique. No distractions, just focus. Designed to help you conquer your tasks with calm and efficiency.</string>
+    <string name="app_btc_profits_name">BTC Profits</string>
+    <string name="app_btc_profits_description">A personal finance tool for Bitcoin enthusiasts. The app allows you to log your Bitcoin purchases and instantly see their current value, tracking your profit or loss over time. The app is available in Portuguese, English, and Spanish.</string>
 
-    <string name="app_plain_notes_name">Plain Notes</string>
-    <string name="app_plain_notes_description">The simplest notepad you will find. Open, write, close. Optional cloud sync and no ads. Your ideas, in their purest form.</string>
-
-    <string name="app_monochrome_walls_name">Monochrome Wallpapers</string>
-    <string name="app_monochrome_walls_description">A curated collection of grayscale wallpapers. Perfect for a clean and elegant screen. New images added weekly by independent artists.</string>
 </resources>

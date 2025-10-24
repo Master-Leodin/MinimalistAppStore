@@ -21,15 +21,8 @@
     <string name="nome_do_app">Nome do App</string>
     <string name="nome_do_desenvolvedor">Desenvolvedor: Leon</string>
 
-    <!-- ... strings existentes ... -->
-
     <!-- Conteúdo dos Apps -->
-    <string name="app_focus_zen_name">Focus Zen</string>
-    <string name="app_focus_zen_description">Um timer minimalista para a técnica Pomodoro. Sem distrações, apenas foco. Desenvolvido para ajudar você a conquistar suas tarefas com calma e eficiência.</string>
+    <string name="app_btc_profits_name">Lucros BTC</string>
+    <string name="app_btc_profits_description">Uma ferramenta de finanças pessoais para entusiastas de Bitcoin. O aplicativo permite que você registre suas compras de Bitcoin e veja instantaneamente seu valor atual, acompanhando seu lucro ou prejuízo ao longo do tempo. O aplicativo está disponível em português, inglês e espanhol.</string>
 
-    <string name="app_plain_notes_name">Plain Notes</string>
-    <string name="app_plain_notes_description">O bloco de notas mais simples que você encontrará. Abra, escreva, feche. Sincronização na nuvem opcional e sem anúncios. Suas ideias, em sua forma mais pura.</string>
-
-    <string name="app_monochrome_walls_name">Monochrome Wallpapers</string>
-    <string name="app_monochrome_walls_description">Uma coleção curada de wallpapers em tons de cinza. Perfeito para uma tela limpa e elegante. Novas imagens adicionadas semanalmente por artistas independentes.</string>
 </resources>
