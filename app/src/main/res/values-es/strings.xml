@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Tienda Minimalista de Apps</string>
+    <string name="main_title">Tienda Minimalista de Apps</string>
+    <string name="download_button">Descargar e Instalar</string>
+    <string name="downloading_button">Descargando...</string>
+    <string name="install_button">Instalar</string>
+    <string name="version_label">Versión %s</string>
+
+    <!-- Strings para el diálogo de instalación -->
+    <string name="install_dialog_title">Instalación Manual Requerida</string>
+    <string name="install_dialog_message">Para tu seguridad, las aplicaciones de fuera de la Play Store requieren un paso adicional.\n\n1. Después de hacer clic en \'OK\', serás redirigido a Configuración.\n2. Activa el permiso para \"Permitir instalación de aplicaciones de fuentes desconocidas\" para esta fuente.\n3. Vuelve a la aplicación y toca \'Instalar\' de nuevo.</string>
+    <string name="install_dialog_positive_button">OK, entendido</string>
+    <string name="install_dialog_negative_button">Cancelar</string>
+
+    <!-- Strings para el diálogo final -->
+    <string name="final_dialog_title">¡Listo para Instalar!</string>
+    <string name="final_dialog_message">Ahora la aplicación %1$s se instalaría. En un escenario real, el archivo APK descargado sería abierto por el sistema Android.</string>
+    <string name="final_dialog_ok_button">Entendido</string>
+    <string name="icone_do_app">Icono de la aplicación</string>
+    <string name="descri_o_detalhada_do_aplicativo_aqui">Descripción detallada de la aplicación aquí.</string>
+    <string name="nome_do_app">Nombre de la aplicación</string>
+    <string name="nome_do_desenvolvedor">Desarrollador: Leon</string>
+
+    <!-- ... strings existentes ... -->
+
+    <!-- Contenido de las Apps -->
+    <string name="app_focus_zen_name">Focus Zen</string>
+    <string name="app_focus_zen_description">Un temporizador minimalista para la técnica Pomodoro. Sin distracciones, solo enfoque. Diseñado para ayudarte a conquistar tus tareas con calma y eficiencia.</string>
+
+    <string name="app_plain_notes_name">Plain Notes</string>
+    <string name="app_plain_notes_description">El bloc de notas más simple que encontrarás. Abre, escribe, cierra. Sincronización en la nube opcional y sin anuncios. Tus ideas, en su forma más pura.</string>
+
+    <string name="app_monochrome_walls_name">Monochrome Wallpapers</string>
+    <string name="app_monochrome_walls_description">Una colección curada de fondos de pantalla en tonos grises. Perfecto para una pantalla limpia y elegante. Imágenes nuevas añadidas semanalmente por artistas independientes.</string>
+</resources>

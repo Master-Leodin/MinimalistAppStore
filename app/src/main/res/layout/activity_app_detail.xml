@@ -15,7 +15,7 @@
             android:id="@+id/detailIconImageView"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:contentDescription="Ícone do App"
+            android:contentDescription="@string/icone_do_app"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detailIconImageView"
-            tools:text="Nome do App" />
+            tools:text="@string/nome_do_app" />
 
         <TextView
             android:id="@+id/detailVersionTextView"
@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detailNameTextView"
-            tools:text="Versão 1.0.0" />
+            tools:text="@string/version_label" />
 
         <TextView
             android:id="@+id/detailDescriptionTextView"
@@ -57,7 +57,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detailVersionTextView"
-            tools:text="Descrição detalhada do aplicativo aqui." />
+            tools:text="@string/descri_o_detalhada_do_aplicativo_aqui" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/downloadButton"
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="32dp"
-            android:text="Baixar e Instalar"
+            android:text="@string/download_button"
             android:textSize="16sp"
             app:cornerRadius="16dp"
             app:layout_constraintBottom_toBottomOf="parent"

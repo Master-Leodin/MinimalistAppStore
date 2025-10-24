@@ -27,26 +27,39 @@ class AppDetailActivity : AppCompatActivity() {
         setupUI()
     }
 
+    /**
+     * Configura a interface do usuário com os dados do aplicativo selecionado.
+     */
     private fun setupUI() {
+        // Carrega o ícone do app usando a biblioteca Coil
         binding.detailIconImageView.load(currentApp.iconUrl)
         binding.detailNameTextView.text = currentApp.name
-        binding.detailVersionTextView.text = "Versão ${currentApp.version}"
+
+        // Define o texto da versão usando o recurso de string formatada
+        binding.detailVersionTextView.text = getString(R.string.version_label, currentApp.version)
         binding.detailDescriptionTextView.text = currentApp.description
+
+        // Define o texto inicial do botão de download
+        binding.downloadButton.text = getString(R.string.download_button)
 
         binding.downloadButton.setOnClickListener {
             simulateDownloadAndInstall()
         }
     }
 
+    /**
+     * Simula o processo de download do APK.
+     * Em um app real, aqui você faria o download do arquivo em uma thread de background.
+     */
     private fun simulateDownloadAndInstall() {
         // 1. Muda o estado do botão para "Baixando..."
-        binding.downloadButton.text = "Baixando..."
+        binding.downloadButton.text = getString(R.string.downloading_button)
         binding.downloadButton.isEnabled = false
 
         // 2. Simula um delay de 3 segundos para o "download"
         Handler(Looper.getMainLooper()).postDelayed({
             // 3. Muda o estado para "Instalar"
-            binding.downloadButton.text = "Instalar"
+            binding.downloadButton.text = getString(R.string.install_button)
             binding.downloadButton.isEnabled = true
 
             // 4. Configura a ação de clique para o botão "Instalar"
@@ -56,29 +69,35 @@ class AppDetailActivity : AppCompatActivity() {
         }, 3000) // 3000ms = 3s
     }
 
+    /**
+     * Exibe um diálogo instruindo o usuário sobre o processo de instalação manual (sideloading).
+     */
     private fun showInstallDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Instalação Manual Necessária")
-            .setMessage("Para sua segurança, apps de fora da Play Store exigem uma etapa extra.\n\n" +
-                    "1. Após clicar em 'OK', você será redirecionado para as Configurações.\n" +
-                    "2. Ative a permissão para \"Permitir instalação de apps desconhecidos\" para esta fonte.\n" +
-                    "3. Volte para o app e toque em 'Instalar' novamente.")
-            .setPositiveButton("OK, entendi") { _, _ ->
+            .setTitle(getString(R.string.install_dialog_title))
+            .setMessage(getString(R.string.install_dialog_message))
+            .setPositiveButton(getString(R.string.install_dialog_positive_button)) { _, _ ->
                 // Aqui você abriria as Configurações do Android para o usuário.
                 // Em um app real, você usaria um Intent para abrir a tela de instalação de apps.
                 // Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).setData(Uri.parse(String.format("package:%s", packageName)))
                 showFinalInstallStep()
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.install_dialog_negative_button), null)
             .show()
     }
 
+    /**
+     * Exibe o diálogo final que simula a instalação do aplicativo.
+     */
     private fun showFinalInstallStep() {
+        // Formata a mensagem com o nome do app
+        val message = getString(R.string.final_dialog_message, currentApp.name)
+
         // Simula o clique final que acionaria o Intent de instalação do APK
         AlertDialog.Builder(this)
-            .setTitle("Pronto para Instalar!")
-            .setMessage("Agora o app ${currentApp.name} seria instalado. Em um cenário real, o arquivo APK baixado seria aberto pelo sistema Android.")
-            .setPositiveButton("Entendido", null)
+            .setTitle(getString(R.string.final_dialog_title))
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.final_dialog_ok_button), null)
             .show()
     }
 }

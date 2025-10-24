@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val apps = AppDataSource.getApps()
+        // Agora passamos 'this' (o contexto da MainActivity) para a AppDataSource
+        val apps = AppDataSource.getApps(this)
         val adapter = AppAdapter(this, apps)
 
         binding.appsRecyclerView.layoutManager = LinearLayoutManager(this)

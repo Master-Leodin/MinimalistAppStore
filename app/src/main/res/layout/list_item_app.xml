@@ -19,7 +19,7 @@
             android:id="@+id/appIconImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="Ícone do App"
+            android:contentDescription="@string/icone_do_app"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher" />
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/appIconImageView"
             app:layout_constraintTop_toTopOf="@id/appIconImageView"
-            tools:text="Nome do App" />
+            tools:text="@string/nome_do_app" />
 
         <TextView
             android:id="@+id/developerNameTextView"
@@ -49,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/appIconImageView"
             app:layout_constraintTop_toBottomOf="@id/appNameTextView"
-            tools:text="Nome do Desenvolvedor" />
+            tools:text="@string/nome_do_desenvolvedor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Minimalist App Store</string>
+    <string name="main_title">Minimalist App Store</string>
+    <string name="download_button">Download and Install</string>
+    <string name="downloading_button">Downloading...</string>
+    <string name="install_button">Install</string>
+    <string name="version_label">Version %s</string>
+
+    <!-- Strings for the installation dialog -->
+    <string name="install_dialog_title">Manual Installation Required</string>
+    <string name="install_dialog_message">For your security, apps from outside the Play Store require an extra step.\n\n1. After clicking \'OK\', you will be redirected to Settings.\n2. Enable the permission to \"Allow installation of apps from this source\".\n3. Return to the app and tap \'Install\' again.</string>
+    <string name="install_dialog_positive_button">OK, I understand</string>
+    <string name="install_dialog_negative_button">Cancel</string>
+
+    <!-- Strings for the final dialog -->
+    <string name="final_dialog_title">Ready to Install!</string>
+    <string name="final_dialog_message">The app %1$s would now be installed. In a real scenario, the downloaded APK file would be opened by the Android system.</string>
+    <string name="final_dialog_ok_button">Understood</string>
+    <string name="icone_do_app">App Icon</string>
+    <string name="descri_o_detalhada_do_aplicativo_aqui">Detailed description of the application here.</string>
+    <string name="nome_do_app">App Name</string>
+    <string name="nome_do_desenvolvedor">Developer: Leon</string>
+
+    <!-- ... strings existentes ... -->
+
+    <!-- App Content -->
+    <string name="app_focus_zen_name">Focus Zen</string>
+    <string name="app_focus_zen_description">A minimalist timer for the Pomodoro technique. No distractions, just focus. Designed to help you conquer your tasks with calm and efficiency.</string>
+
+    <string name="app_plain_notes_name">Plain Notes</string>
+    <string name="app_plain_notes_description">The simplest notepad you will find. Open, write, close. Optional cloud sync and no ads. Your ideas, in their purest form.</string>
+
+    <string name="app_monochrome_walls_name">Monochrome Wallpapers</string>
+    <string name="app_monochrome_walls_description">A curated collection of grayscale wallpapers. Perfect for a clean and elegant screen. New images added weekly by independent artists.</string>
+</resources>
