@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Cambodia Tech Hope",
+    "description": "A long-term project to create a non-profit initiative focused on training IT teachers in rural Cambodia, empowering local communities through technology.",
+    "url": "https://www.cambodiateckhope.org/"
+  },
+  {
+    "name": "BTC Game Store",
+    "description": "A web platform for distributing indie games across multiple platforms, featuring integrated Bitcoin payments to support developers directly.",
+    "url": "https://btcgamestore.netlify.app/"
+  },
+  {
+    "name": "Leonardo - Annihilated",
+    "description": "The powerful story of a resilient developer fighting against systemic barriers, using technology as a weapon to rebuild his life from the streets.",
+    "url": "https://leonportfolio.netlify.app/"
+  }
+]
