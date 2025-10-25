@@ -1,0 +1,11 @@
+[
+  {
+    "name": "BTC Profits",
+    "developer": "Master-Leodin",
+    "description": "A personal finance tool for Bitcoin enthusiasts. The app allows you to log your Bitcoin purchases and instantly see their current value, tracking your profit or loss over time. The app is available in Portuguese, English, and Spanish.",
+    "iconUrl": "https://i.imgur.com/gKd5h2S.png",
+    "apkUrl": "https://github.com/Master-Leodin/LucrosBTC/releases/download/BTC_0.1.9/BTC-0-1-9.apk",
+    "version": "0.1.9",
+    "openSourceUrl": "https://github.com/Master-Leodin/LucrosBTC"
+  }
+]
