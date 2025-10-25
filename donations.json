@@ -1,0 +1,36 @@
+[
+  {
+    "title": "Strategic Donation",
+    "subtitle": "PayPal / Wise",
+    "description": "These platforms are the most direct way to fund the critical initial phase of my plan. To avoid platform blocks, consider pooling donations with friends or making a monthly contribution.",
+    "methods": [
+      {
+        "name": "PayPal Email",
+        "value": "leonardo132@gmail.com",
+        "type": "text"
+      },
+      {
+        "name": "Wise Link",
+        "value": "https://wise.com/pay/me/leonardot1427",
+        "type": "link"
+      }
+    ]
+  },
+  {
+    "title": "Resistance Donation",
+    "subtitle": "Bitcoin (BTC)",
+    "description": "Bitcoin provides a sovereign store of value, beyond the reach of the systemic corruption that forced me onto the streets. Your donation here is not just help; it's a secure asset for my future.",
+    "methods": [
+      {
+        "name": "On-Chain Address",
+        "value": "bc1qjahmm3qtzpn9kc86j8uedejjuvtlp66z8w3wek",
+        "type": "text"
+      },
+      {
+        "name": "Lightning Network Address",
+        "value": "mightynepal82@walletofsatoshi.com",
+        "type": "text"
+      }
+    ]
+  }
+]
