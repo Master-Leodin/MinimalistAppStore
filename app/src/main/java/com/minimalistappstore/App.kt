@@ -3,8 +3,10 @@ package com.minimalistappstore
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class App(
     val name: String,
     val developer: String,
