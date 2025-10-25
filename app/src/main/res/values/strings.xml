@@ -25,4 +25,26 @@
     <string name="app_btc_profits_name">Lucros BTC</string>
     <string name="app_btc_profits_description">Uma ferramenta de finanças pessoais para entusiastas de Bitcoin. O aplicativo permite que você registre suas compras de Bitcoin e veja instantaneamente seu valor atual, acompanhando seu lucro ou prejuízo ao longo do tempo. O aplicativo está disponível em português, inglês e espanhol.</string>
 
+    <string name="nav_apps">Apps</string>
+    <string name="nav_games">Jogos</string>
+    <string name="nav_websites">Websites</string>
+    <string name="nav_donate">Doações</string>
+    <string name="open_drawer">Abrir Menu</string>
+    <string name="close_drawer">Fechar Menu</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_subtitle">minimalistappstore@example.com</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="jogos_em_breve">Jogos em breve...</string>
+
+    <string name="website_cambodia_name">Cambodia Tech Hope</string>
+    <string name="website_cambodia_description">Um projeto de longo prazo para criar uma iniciativa sem fins lucrativos focada em treinar professores de TI no Camboja rural.</string>
+
+    <string name="website_btcgamestore_name">BTC Game Store</string>
+    <string name="website_btcgamestore_description">Uma plataforma para distribuir jogos indie, com pagamentos integrados em Bitcoin para apoiar desenvolvedores diretamente.</string>
+
+    <string name="website_leonardo_name">Leonardo - Aniquilado</string>
+    <string name="website_leonardo_description">A poderosa história de um desenvolvedor resiliente que luta contra barreiras sistêmicas, usando a tecnologia como arma para reconstruir sua vida.</string>
+
 </resources>

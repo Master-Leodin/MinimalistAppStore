@@ -25,4 +25,23 @@
     <string name="app_btc_profits_name">BTC Profits</string>
     <string name="app_btc_profits_description">A personal finance tool for Bitcoin enthusiasts. The app allows you to log your Bitcoin purchases and instantly see their current value, tracking your profit or loss over time. The app is available in Portuguese, English, and Spanish.</string>
 
+    <string name="nav_apps">Apps</string>
+    <string name="nav_games">Games</string>
+    <string name="nav_websites">Websites</string>
+    <string name="nav_donate">Donations</string>
+    <string name="open_drawer">Open Menu</string>
+    <string name="close_drawer">Close Menu</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_subtitle">minimalistappstore@example.com</string>
+    <string name="jogos_em_breve">Games coming soon...</string>
+    <string name="website_cambodia_name">Cambodia Tech Hope</string>
+    <string name="website_cambodia_description">A long-term project to create a non-profit initiative focused on training IT teachers in rural Cambodia.</string>
+
+    <string name="website_btcgamestore_name">BTC Game Store</string>
+    <string name="website_btcgamestore_description">A platform for distributing indie games, with integrated Bitcoin payments to directly support developers.</string>
+
+    <string name="website_leonardo_name">Leonardo - Annihilated</string>
+    <string name="website_leonardo_description">The powerful story of a resilient developer who fights against systemic barriers, using technology as a weapon to rebuild his life.</string>
+
 </resources>

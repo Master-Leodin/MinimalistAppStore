@@ -17,7 +17,7 @@ android {
         minSdk = 28
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation(libs.coil)
+    implementation(libs.androidx.runtime.saved.instance.state)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -54,4 +55,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx.v277)
 }

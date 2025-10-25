@@ -1,22 +1,28 @@
 [versions]
 agp = "8.6.1"
 firebase-bom = "34.4.0"
-kotlin = "1.9.24"
+kotlin = "2.0.20"
 # Use uma versão do core-ktx que seja compatível e estável
 core-ktx = "1.15.0"
 junit = "4.13.2"
 androidx-junit = "1.2.1"
 espresso-core = "3.6.1"
 appcompat = "1.7.0" # Versão mais recente e estável
-kotlinx-serialization-json = "1.6.3"
+kotlinx-serialization-json = "1.7.3"
 material = "1.12.0" # Versão mais recente e estável
 activity = "1.10.1"
 constraintlayout = "2.2.0" # Versão mais recente
 coil = "2.5.0"
+navigation-fragment-ktx = "2.9.5"
+navigation-ui-ktx = "2.9.5"
+navigation-ui-ktx-version = "2.7.7"
+runtime-saved-instance-state = "1.0.0-alpha11"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+androidx-navigation-ui-ktx-v277 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-ui-ktx-version" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
@@ -32,6 +38,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 # Outras bibliotecas
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
+androidx-runtime-saved-instance-state = { group = "androidx.compose.runtime", name = "runtime-saved-instance-state", version.ref = "runtime-saved-instance-state" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
