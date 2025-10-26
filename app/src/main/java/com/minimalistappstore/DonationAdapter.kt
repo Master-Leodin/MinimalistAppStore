@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,8 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonationViewHolder {
         val binding = ListItemDonationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DonationViewHolder(binding)
+        // CORREÇÃO CHAVE: Passamos o contexto do 'parent' para o ViewHolder
+        return DonationViewHolder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: DonationViewHolder, position: Int) {
@@ -31,26 +33,24 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
     override fun getItemCount(): Int = donationOptions.size
 
-    inner class DonationViewHolder(private val binding: ListItemDonationBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class DonationViewHolder(private val binding: ListItemDonationBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(option: DonationOption) {
             binding.donationTitleTextView.text = option.title
             binding.donationSubtitleTextView.text = option.subtitle
             binding.donationDescriptionTextView.text = option.description
 
-            // Limpa métodos antigos antes de adicionar os novos
             binding.methodsContainer.removeAllViews()
 
-            // Configura o RecyclerView para os métodos
-            val methodsAdapter = DonationMethodsAdapter(option.methods, binding.root.context)
-            binding.methodsContainer.addView(RecyclerView(binding.root.context).apply {
+            // CORREÇÃO CHAVE: Usamos a variável 'context' que recebemos no construtor
+            val methodsAdapter = DonationMethodsAdapter(option.methods, context)
+            binding.methodsContainer.addView(RecyclerView(context).apply {
                 adapter = methodsAdapter
-                layoutManager = LinearLayoutManager(binding.root.context)
+                layoutManager = LinearLayoutManager(context)
             })
         }
     }
 
-    // Adapter aninhado para os métodos de doação
     private class DonationMethodsAdapter(
         private val methods: List<DonationMethod>,
         private val context: Context
@@ -73,13 +73,22 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
                 binding.methodValueTextView.text = method.value
 
                 binding.copyButton.setOnClickListener {
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("Donation Info", method.value)
+                    Log.d("DonationAdapter", "Botão de copiar clicado para: ${method.name}")
+
+                    val valueToCopy = if (method.name.contains("Wise", ignoreCase = true)) {
+                        method.value.substringAfterLast("/")
+                    } else {
+                        method.value
+                    }
+
+                    // CORREÇÃO CHAVE: Usamos a variável 'context' aqui também
+                    val clipboard = context.getSystemService(ClipboardManager::class.java)
+                    val clip = ClipData.newPlainText("Donation Info", valueToCopy)
                     clipboard.setPrimaryClip(clip)
+
                     Toast.makeText(context, "Copiado para a área de transferência!", Toast.LENGTH_SHORT).show()
 
-                    // Se for um link, pergunta se o usuário quer abrir
-                    if (method.type == "link") {
+                    if (method.type == "link" && !method.name.contains("Wise", ignoreCase = true)) {
                         openLink(method.value)
                     }
                 }

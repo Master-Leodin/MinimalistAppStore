@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import java.net.URL
 
 object DonationFetcher {
-    private const val DONATIONS_JSON_URL = "https://raw.githubusercontent.com/Master-Leodin/MinimalistAppStore/refs/heads/main/donations.json"
+    private const val DONATIONS_JSON_URL = "https://pagebroke.netlify.app/json/donations.json"
     private val json = Json { ignoreUnknownKeys = true }
 
     suspend fun fetchDonations(): Result<List<DonationOption>> {

@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import java.net.URL
 
 object AppFetcher {
-    private const val APPS_JSON_URL = "https://raw.githubusercontent.com/Master-Leodin/MinimalistAppStore/refs/heads/main/apps.json"
+    private const val APPS_JSON_URL = "https://pagebroke.netlify.app/json/apps.json"
 
     private val json = Json { ignoreUnknownKeys = true }
 

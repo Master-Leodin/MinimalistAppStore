@@ -8,8 +8,7 @@ import kotlinx.serialization.json.Json
 import java.net.URL
 
 object WebsiteFetcher {
-    // URL do arquivo JSON para os sites
-    private const val WEBSITES_JSON_URL = "https://raw.githubusercontent.com/Master-Leodin/MinimalistAppStore/refs/heads/main/websites.json"
+    private const val WEBSITES_JSON_URL = "https://pagebroke.netlify.app/json/websites.json"
 
     private val json = Json { ignoreUnknownKeys = true }
 

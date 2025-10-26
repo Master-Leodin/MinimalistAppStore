@@ -3,8 +3,10 @@ package com.minimalistappstore
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class DonationOption(
     val title: String,
     val subtitle: String,
@@ -13,8 +15,9 @@ data class DonationOption(
 ) : Parcelable
 
 @Parcelize
+@Serializable
 data class DonationMethod(
     val name: String,
     val value: String,
-    val type: String // "link" para abrir no navegador, "text" para copiar
+    val type: String
 ) : Parcelable
