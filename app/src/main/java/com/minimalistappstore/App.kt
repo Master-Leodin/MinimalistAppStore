@@ -1,4 +1,3 @@
-// App.kt
 package com.minimalistappstore
 
 import android.os.Parcelable
@@ -8,11 +7,12 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 data class App(
-    val name: String,
-    val developer: String,
-    val description: String,
-    val iconUrl: String,
-    val apkUrl: String, // URL para download do APK
-    val version: String,
-    val openSourceUrl: String // URL para o código-fonte (GitHub)
+    var name: String = "",
+    var developer: String = "",
+    var description: String = "",
+    var iconUrl: String = "",
+    var apkUrl: String = "",
+    var version: String = "",
+    var openSourceUrl: String = "",
+    var packageName: String = "" // ESTA LINHA É ESSENCIAL
 ) : Parcelable

@@ -35,7 +35,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_header_subtitle">minimalistappstore@example.com</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="jogos_em_breve">Jogos em breve...</string>
 
     <string name="website_cambodia_name">Cambodia Tech Hope</string>
@@ -47,4 +47,5 @@
     <string name="website_leonardo_name">Leonardo - Aniquilado</string>
     <string name="website_leonardo_description">A poderosa história de um desenvolvedor resiliente que luta contra barreiras sistêmicas, usando a tecnologia como arma para reconstruir sua vida.</string>
 
+    <string name="nav_updates">Atualizações</string>
 </resources>

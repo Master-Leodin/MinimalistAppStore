@@ -16,8 +16,8 @@ android {
         applicationId = "com.minimalistappstore"
         minSdk = 28
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -57,4 +57,6 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx.v277)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 }
