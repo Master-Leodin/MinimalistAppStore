@@ -20,7 +20,7 @@ data class AppVersion(
 
 object VersionChecker {
     // Substitua pela URL do seu arquivo version.json no Netlify
-    private const val VERSION_URL = "https://SEU-SITIO.netlify.app/version.json"
+    private const val VERSION_URL = "https://pagebroke.netlify.app/json/version.json"
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
