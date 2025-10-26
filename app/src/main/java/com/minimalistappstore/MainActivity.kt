@@ -1,9 +1,13 @@
 package com.minimalistappstore
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -11,7 +15,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.minimalistappstore.databinding.ActivityMainBinding
-import androidx.appcompat.app.AppCompatDelegate
+import com.minimalistappstore.databinding.DialogUpdateAvailableBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupNavigation()
+        checkForAppUpdate()
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.nav_apps
@@ -38,27 +44,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        // Encontra o NavHostFragment de forma segura
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
             ?: run {
-                // Se for nulo, mostra um erro e para a execução para evitar o crash
                 error("Could not find NavHostFragment with id R.id.nav_host_fragment")
             }
 
         val navController = navHostFragment.navController
 
-        // Configura a AppBar
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_apps, R.id.nav_games, R.id.nav_websites, R.id.nav_donate),
             binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        // Configura o menu gaveta
         binding.navigationView.setupWithNavController(navController)
-
-        // Configura a barra inferior
         binding.bottomNavigationView.setupWithNavController(navController)
     }
 
@@ -66,5 +66,37 @@ class MainActivity : AppCompatActivity() {
         val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
             ?.let { it as? NavHostFragment }?.navController
         return navController?.navigateUp(appBarConfiguration) ?: super.onSupportNavigateUp()
+    }
+
+    private fun checkForAppUpdate() {
+        lifecycleScope.launch {
+            val updateInfo = VersionChecker.checkForUpdate(this@MainActivity)
+            updateInfo?.let {
+                showUpdateDialog(it)
+            }
+        }
+    }
+
+    private fun showUpdateDialog(version: AppVersion) {
+        val dialogBinding = DialogUpdateAvailableBinding.inflate(layoutInflater)
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialogBinding.releaseNotesTextView.text = version.releaseNotes
+
+        dialogBinding.updateButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(version.apkUrl))
+            startActivity(intent)
+            dialog.dismiss()
+        }
+
+        dialogBinding.laterButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
