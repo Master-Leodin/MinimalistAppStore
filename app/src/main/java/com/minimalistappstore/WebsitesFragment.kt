@@ -39,11 +39,15 @@ class WebsitesFragment : Fragment() {
     private fun loadWebsites() {
         binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
-            val result = WebsiteFetcher.fetchWebsites() // Usaremos um novo fetcher
+            val result = WebsiteFetcher.fetchWebsites()
             binding.progressBar.visibility = View.GONE
             result.onSuccess { websites ->
-                val adapter = WebsiteAdapter(websites)
-                binding.websitesRecyclerView.adapter = adapter
+                if (websites.isEmpty()) {
+                    Toast.makeText(requireContext(), "Nenhum site encontrado.", Toast.LENGTH_SHORT).show()
+                } else {
+                    val adapter = WebsiteAdapter(websites)
+                    binding.websitesRecyclerView.adapter = adapter
+                }
             }.onFailure { error ->
                 Toast.makeText(requireContext(), "Erro ao carregar sites: ${error.message}", Toast.LENGTH_LONG).show()
             }

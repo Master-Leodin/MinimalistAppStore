@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:padding="16dp"
     tools:context=".AppsFragment">
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/websitesTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Websites"
@@ -27,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@id/websitesTitleTextView"
         tools:listitem="@layout/list_item_app" />
 
     <ProgressBar

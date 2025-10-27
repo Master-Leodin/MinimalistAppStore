@@ -1,3 +1,4 @@
+// AppsFragment.kt
 package com.minimalistappstore
 
 import android.os.Bundle
@@ -36,10 +37,8 @@ class AppsFragment : Fragment() {
     }
 
     private fun loadApps() {
-        binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             val result = AppFetcher.fetchApps()
-            binding.progressBar.visibility = View.GONE
             result.onSuccess { apps ->
                 val adapter = AppAdapter(requireContext(), apps)
                 binding.appsRecyclerView.adapter = adapter
@@ -51,6 +50,6 @@ class AppsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Evita memory leaks
+        _binding = null
     }
 }

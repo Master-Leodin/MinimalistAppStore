@@ -1,14 +1,16 @@
-<!-- res/layout/list_item_app.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    android:foreground="?android:attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +21,7 @@
             android:id="@+id/appIconImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/icone_do_app"
+            android:contentDescription="Ícone do App"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher" />
@@ -29,27 +31,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color_primary"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/developerNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/appIconImageView"
-            app:layout_constraintTop_toTopOf="@id/appIconImageView"
-            tools:text="@string/nome_do_app" />
+            app:layout_constraintStart_toEndOf="@+id/appIconImageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/developerNameTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textColor="@color/material_on_surface_disabled"
+            android:textColor="@color/text_color_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/appIconImageView"
-            app:layout_constraintTop_toBottomOf="@id/appNameTextView"
-            tools:text="@string/nome_do_desenvolvedor" />
+            app:layout_constraintStart_toEndOf="@+id/appIconImageView"
+            app:layout_constraintTop_toBottomOf="@+id/appNameTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

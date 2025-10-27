@@ -3,4 +3,24 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_color">#00897B</color>
+
+    <!-- Cor Primária (Azul Amigável) -->
+    <color name="app_primary">#2196F3</color>
+    <color name="app_primary_variant">#1976D2</color>
+
+    <!-- Cor de Fundo dos Cards (Cinza Claro) -->
+    <color name="card_background">#F5F5F5</color>
+
+    <!-- Cor do Texto Principal (Cinza Escuro) -->
+    <color name="text_color_primary">#212121</color>
+
+    <!-- Cor do Texto Secundário (Cinza Média) -->
+    <color name="text_color_secondary">#757575</color>
+
+    <!-- Cor de Destaque (um azul mais claro para botões e ícones) -->
+    <color name="accent_color">#03DAC6</color>
+
+    <!-- Cor do Fundo da Tela Principal (Azul Suave) -->
+    <color name="screen_background">#E3F2FD</color>
+
 </resources>
