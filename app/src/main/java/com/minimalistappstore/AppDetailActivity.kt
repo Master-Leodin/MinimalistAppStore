@@ -32,8 +32,12 @@ class AppDetailActivity : AppCompatActivity() {
     private lateinit var currentApp: App
     private var apkUri: Uri? = null
 
-    companion object {
-        private const val REQUEST_INSTALL_PERMISSION_CODE = 1001
+    // Implementação da Activity Result API (Substitui onActivityResult)
+    private val requestInstallPermissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) {
+        // Verifica a permissão após o retorno do usuário
+        checkPermissionAndStartDownload()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +46,23 @@ class AppDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         currentApp = intent.getParcelableExtra("APP_EXTRA")!!
+
+        // 1. Configura a Toolbar
+        setSupportActionBar(binding.toolbar)
+
+        // 2. Configura a ActionBar para exibir o botão de voltar
+        supportActionBar?.apply {
+            title = currentApp.name
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         setupUI()
+    }
+
+    // Trata o clique no botão de voltar (Up button)
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     private fun setupUI() {
@@ -80,7 +100,8 @@ class AppDetailActivity : AppCompatActivity() {
                 val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
                     data = Uri.parse(String.format("package:%s", packageName))
                 }
-                startActivityForResult(intent, REQUEST_INSTALL_PERMISSION_CODE)
+                // Usa a nova Activity Result API
+                requestInstallPermissionLauncher.launch(intent)
             }
             .setNegativeButton(getString(R.string.install_dialog_negative_button), null)
             .show()
@@ -163,13 +184,6 @@ class AppDetailActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton(getString(R.string.final_dialog_ok_button), null)
             .show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_INSTALL_PERMISSION_CODE) {
-            checkPermissionAndStartDownload()
-        }
     }
 
     private fun saveInstalledApp(packageName: String) {

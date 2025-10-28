@@ -1,73 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/detailIconImageView"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:contentDescription="Ícone do App"
-            tools:src="@mipmap/ic_launcher" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/detailNameTextView"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            tools:text="Nome do App" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <TextView
-            android:id="@+id/detailVersionTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            android:textColor="@color/material_on_surface_disabled"
-            tools:text="Versão 1.0.0" />
+            <ImageView
+                android:id="@+id/detailIconImageView"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:contentDescription="Ícone do App"
+                tools:src="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/detailDescriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingMultiplier="1.2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:textColor="@color/black"
-            tools:text="Descrição detalhada do aplicativo aqui." />
+            <TextView
+                android:id="@+id/detailNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:text="Nome do App" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/detailVersionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="@color/material_on_surface_disabled"
+                tools:text="Versão 1.0.0" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/downloadButton"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/download_button"
-            android:textSize="16sp"
-            app:cornerRadius="16dp" />
+            <TextView
+                android:id="@+id/detailDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingMultiplier="1.2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textColor="@color/black"
+                tools:text="Descrição detalhada do aplicativo aqui." />
 
-    </LinearLayout>
-</ScrollView>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/downloadButton"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/download_button"
+                android:textSize="16sp"
+                app:cornerRadius="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
