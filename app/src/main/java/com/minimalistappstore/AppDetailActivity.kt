@@ -40,6 +40,12 @@ class AppDetailActivity : AppCompatActivity() {
         checkPermissionAndStartDownload()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Garante que o estado do botão seja atualizado quando a Activity volta ao foco
+        setupUI()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppDetailBinding.inflate(layoutInflater)
@@ -55,8 +61,6 @@ class AppDetailActivity : AppCompatActivity() {
             title = currentApp.name
             setDisplayHomeAsUpEnabled(true)
         }
-
-        setupUI()
     }
 
     // Trata o clique no botão de voltar (Up button)
@@ -70,10 +74,21 @@ class AppDetailActivity : AppCompatActivity() {
         binding.detailNameTextView.text = currentApp.name
         binding.detailVersionTextView.text = getString(R.string.version_label, currentApp.version)
         binding.detailDescriptionTextView.text = currentApp.description
-        binding.downloadButton.text = getString(R.string.download_button)
 
-        binding.downloadButton.setOnClickListener {
-            checkPermissionAndStartDownload()
+        // Lógica para verificar o estado de instalação e configurar o botão
+        if (isAppInstalledByStore(currentApp)) {
+            binding.downloadButton.text = getString(R.string.uninstall_button)
+            binding.downloadButton.setOnClickListener {
+                uninstallApp()
+                // Após iniciar a desinstalação, removemos o registro local e atualizamos a UI
+                removeInstalledApp(currentApp)
+                setupUI()
+            }
+        } else {
+            binding.downloadButton.text = getString(R.string.download_button)
+            binding.downloadButton.setOnClickListener {
+                checkPermissionAndStartDownload()
+            }
         }
     }
 
@@ -161,6 +176,8 @@ class AppDetailActivity : AppCompatActivity() {
 
         try {
             startActivity(installIntent)
+            // Chamada para salvar o registro de instalação (agora salva a versão)
+            saveInstalledApp(currentApp)
         } catch (e: Exception) {
             Toast.makeText(this, "Não foi possível iniciar a instalação.", Toast.LENGTH_SHORT).show()
         }
@@ -186,10 +203,47 @@ class AppDetailActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun saveInstalledApp(packageName: String) {
+    private fun saveInstalledApp(app: App) {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
-        editor.putString(packageName, packageName)
+        // Salva a versão que a loja instalou, usando o nome do app como chave
+        editor.putString(app.name, app.version)
         editor.apply()
+    }
+
+    private fun removeInstalledApp(app: App) {
+        val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.remove(app.name)
+        editor.apply()
+    }
+
+    // Verifica se o app está instalado no sistema E se foi instalado por esta loja (versão compatível)
+    private fun isAppInstalledByStore(app: App): Boolean {
+        // 1. Verifica se o app está instalado no sistema
+        val isInstalledOnDevice = try {
+            packageManager.getPackageInfo(app.packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+
+        if (!isInstalledOnDevice) return false
+
+        // 2. Verifica se a loja registrou a instalação
+        val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        val registeredVersion = prefs.getString(app.name, null)
+
+        // Se a versão registrada for igual à versão atual do app na loja, consideramos que foi instalado pela loja
+        return registeredVersion == app.version
+    }
+
+    private fun uninstallApp() {
+        val intent = Intent(Intent.ACTION_DELETE).apply {
+            // O nome do pacote real do app deve ser usado aqui.
+            // Assumindo que currentApp.packageName contém o nome do pacote (ex: com.example.app)
+            data = Uri.fromParts("package", currentApp.packageName, null)
+        }
+        startActivity(intent)
     }
 }

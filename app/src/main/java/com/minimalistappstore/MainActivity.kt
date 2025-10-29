@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupNavigation()
-        checkForAppUpdate()
+        checkForAppUpdate() // Chamada no onCreate
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.nav_apps
@@ -76,21 +76,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showUpdateDialog(version: AppVersion) {
+        // Usa o layout de binding para o diálogo
         val dialogBinding = DialogUpdateAvailableBinding.inflate(layoutInflater)
 
+        // Configura o diálogo
         val dialog = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
-            .setCancelable(false)
+            .setCancelable(false) // Impede que o usuário feche clicando fora
             .create()
 
+        // Exibe as notas de lançamento
         dialogBinding.releaseNotesTextView.text = version.releaseNotes
 
+        // Configura o botão de atualização (Download)
         dialogBinding.updateButton.setOnClickListener {
+            // Abre o link direto do APK
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(version.apkUrl))
             startActivity(intent)
             dialog.dismiss()
         }
 
+        // Configura o botão "Mais tarde"
         dialogBinding.laterButton.setOnClickListener {
             dialog.dismiss()
         }

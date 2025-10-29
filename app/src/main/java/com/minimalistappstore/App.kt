@@ -14,5 +14,5 @@ data class App(
     var apkUrl: String = "",
     var version: String = "",
     var openSourceUrl: String = "",
-    var packageName: String = "" // ESTA LINHA É ESSENCIAL
+    var packageName: String = ""
 ) : Parcelable

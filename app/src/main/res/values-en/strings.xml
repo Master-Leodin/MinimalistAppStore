@@ -46,4 +46,6 @@
 
     <string name="nav_updates">Updates</string>
 
+    <string name="uninstall_button">Uninstall APP</string>
+
 </resources>

@@ -26,9 +26,10 @@ object VersionChecker {
     /**
      * Obtém a versão atual do app instalado.
      */
-    private fun getCurrentVersionCode(context: Context): Int {
+    private fun getCurrentVersionCode(context: Context ): Int {
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            // Usando longVersionCode.toInt() para compatibilidade com versões mais recentes
             packageInfo.longVersionCode.toInt()
         } catch (e: PackageManager.NameNotFoundException) {
             -1 // Em caso de erro, retorna um valor inválido
@@ -56,10 +57,11 @@ object VersionChecker {
      * Retorna um objeto AppVersion se houver, ou null se não houver ou ocorrer erro.
      */
     suspend fun checkForUpdate(context: Context): AppVersion? {
-        val currentVersion = getCurrentVersionCode(context)
-        if (currentVersion == -1) return null // Não foi possível obter a versão atual
+        val currentVersionCode = getCurrentVersionCode(context)
+        if (currentVersionCode == -1) return null // Não foi possível obter a versão atual
 
         val result = fetchLatestVersion()
-        return result.getOrNull()?.takeIf { it.latestVersionCode > currentVersion }
+        // Retorna a versão mais recente SOMENTE se o código de versão for maior que o atual
+        return result.getOrNull()?.takeIf { it.latestVersionCode > currentVersionCode }
     }
 }
