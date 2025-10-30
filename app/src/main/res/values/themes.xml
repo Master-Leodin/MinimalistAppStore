@@ -1,8 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MinimalistAppStore" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Mapeamento das cores para o Tema Material 3 -->
+        <item name="colorPrimary">@color/app_primary</item>
+        <item name="colorPrimaryVariant">@color/app_primary_variant</item>
+        <item name="colorSecondary">@color/accent_color</item>
+        <item name="colorSecondaryVariant">@color/accent_color</item>
+        <item name="colorSurface">@color/card_background</item>
+        <item name="colorOnSurface">@color/text_color_primary</item>
+
+        <!-- Adicionando colorBackground para testar o fundo principal do Fragment -->
+        <item name="android:colorBackground">@color/app_background</item>
+
+        <!-- Cor de Fundo da Janela -->
         <item name="android:windowBackground">@color/screen_background</item>
-        <item name="android:forceDarkAllowed">false</item>
     </style>
 
     <style name="Theme.MinimalistAppStore" parent="Base.Theme.MinimalistAppStore" />

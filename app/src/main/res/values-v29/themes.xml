@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Base.Theme.MinimalistAppStore" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowBackground">@color/screen_background</item>
+        <!-- Atributo específico para API 29+ -->
         <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

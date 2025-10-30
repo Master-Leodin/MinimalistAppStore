@@ -28,10 +28,12 @@ class WebsiteAdapter(private val websites: List<Website>) :
     inner class WebsiteViewHolder(private val binding: ListItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(website: Website) {
             // Usamos um ícone de globo genérico para sites
-            binding.appIconImageView.load("https://i.imgur.com/gKd5h2S.png")
+            binding.appIconImageView.load("https://i.imgur.com/gKd5h2S.png" )
             binding.appNameTextView.text = website.name
-            // Reaproveitamos o campo do desenvolvedor para o nome do site
-            binding.developerNameTextView.text = website.name
+
+            // CORREÇÃO: Exibe a descrição do site no campo developerNameTextView
+            binding.developerNameTextView.text = website.description
+
             binding.root.setOnClickListener {
                 // Cria um Intent para abrir a URL no navegador
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(website.url))
