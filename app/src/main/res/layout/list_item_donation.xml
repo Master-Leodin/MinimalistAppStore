@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="?attr/colorSurface">
+    app:cardBackgroundColor="#232946">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="#EAEAEA"
             android:textStyle="bold"
             tools:text="Strategic Donation" />
 
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="#B8B8D1"
             tools:text="PayPal / Wise" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:lineSpacingMultiplier="1.1"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="#EAEAEA"
             tools:text="Description of the donation method..." />
 
         <LinearLayout

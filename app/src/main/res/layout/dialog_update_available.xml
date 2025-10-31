@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- res/layout/dialog_update_available.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="#232946">
 
     <ImageView
         android:layout_width="64dp"
@@ -21,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:text="Nova Versão Disponível!"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="#E94560"
         android:textStyle="bold" />
 
     <TextView
@@ -31,6 +33,7 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="#EAEAEA"
         tools:text="Release notes da nova versão aparecerão aqui." />
 
     <LinearLayout
@@ -46,7 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="Agora não" />
+            android:text="Agora não"
+            app:strokeColor="#533483"
+            android:textColor="#533483" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/updateButton"
@@ -55,7 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Atualizar" />
+            android:text="Atualizar"
+            app:backgroundTint="#E94560"
+            android:textColor="#1A1A2E" />
 
     </LinearLayout>
 </LinearLayout>

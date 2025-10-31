@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1A1A2E"
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,12 +16,13 @@
             android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#533483"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/app_name"
-            app:titleTextColor="?attr/colorOnPrimary" />
+            app:titleTextColor="#EAEAEA"
+            app:navigationIconTint="#E94560" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -39,6 +41,9 @@
             android:id="@+id/bottomNavigationView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="#1A1A2E"
+            app:itemIconTint="#E94560"
+            app:itemTextColor="#EAEAEA"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="#232946"
+        app:itemIconTint="#E94560"
+        app:itemTextColor="#EAEAEA"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/bottom_nav_menu" />
 

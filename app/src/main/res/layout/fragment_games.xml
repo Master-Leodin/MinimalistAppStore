@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="#1A1A2E"
     tools:context=".GamesFragment">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/jogos_em_breve"
-        android:textColor="?attr/colorOnBackground"
+        android:textColor="#EAEAEA"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

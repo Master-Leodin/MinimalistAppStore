@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -5,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#232946">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:textStyle="bold"
+                android:textColor="#EAEAEA"
                 tools:text="Nome do App" />
 
             <TextView
@@ -40,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@android:color/holo_orange_dark"
+                android:textColor="#E94560"
                 tools:text="Atualização disponível!" />
 
         </LinearLayout>
@@ -51,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Atualizar"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="#E94560" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
