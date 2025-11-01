@@ -1,6 +1,6 @@
 package com.minimalistappstore
 
-import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,15 +8,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.minimalistappstore.databinding.ActivityAppDetailBinding
 import kotlinx.coroutines.Dispatchers
@@ -32,17 +32,14 @@ class AppDetailActivity : AppCompatActivity() {
     private lateinit var currentApp: App
     private var apkUri: Uri? = null
 
-    // Implementação da Activity Result API (Substitui onActivityResult)
     private val requestInstallPermissionLauncher = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
     ) {
-        // Verifica a permissão após o retorno do usuário
         checkPermissionAndStartDownload()
     }
 
     override fun onResume() {
         super.onResume()
-        // Garante que o estado do botão seja atualizado quando a Activity volta ao foco
         setupUI()
     }
 
@@ -53,17 +50,16 @@ class AppDetailActivity : AppCompatActivity() {
 
         currentApp = intent.getParcelableExtra("APP_EXTRA")!!
 
-        // 1. Configura a Toolbar
         setSupportActionBar(binding.toolbar)
-
-        // 2. Configura a ActionBar para exibir o botão de voltar
         supportActionBar?.apply {
             title = currentApp.name
             setDisplayHomeAsUpEnabled(true)
         }
+
+        setupUI()
+        setupScreenshots() // Esta linha estava faltando!
     }
 
-    // Trata o clique no botão de voltar (Up button)
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
@@ -75,12 +71,10 @@ class AppDetailActivity : AppCompatActivity() {
         binding.detailVersionTextView.text = getString(R.string.version_label, currentApp.version)
         binding.detailDescriptionTextView.text = currentApp.description
 
-        // Lógica para verificar o estado de instalação e configurar o botão
         if (isAppInstalledByStore(currentApp)) {
             binding.downloadButton.text = getString(R.string.uninstall_button)
             binding.downloadButton.setOnClickListener {
                 uninstallApp()
-                // Após iniciar a desinstalação, removemos o registro local e atualizamos a UI
                 removeInstalledApp(currentApp)
                 setupUI()
             }
@@ -92,6 +86,76 @@ class AppDetailActivity : AppCompatActivity() {
         }
     }
 
+    // ADICIONE ESTA FUNÇÃO QUE ESTAVA FALTANDO:
+    private fun setupScreenshots() {
+        val screenshotUrls = currentApp.screenshotUrls
+
+        if (screenshotUrls.isNotEmpty()) {
+            binding.screenshotsTitleTextView.visibility = android.view.View.VISIBLE
+            binding.screenshotsRecyclerView.visibility = android.view.View.VISIBLE
+
+            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.screenshotsRecyclerView.layoutManager = layoutManager
+
+            val adapter = ScreenshotAdapter(screenshotUrls) { imageUrl, position ->
+                showFullscreenImage(imageUrl, screenshotUrls, position)
+            }
+            binding.screenshotsRecyclerView.adapter = adapter
+        } else {
+            binding.screenshotsTitleTextView.visibility = android.view.View.GONE
+            binding.screenshotsRecyclerView.visibility = android.view.View.GONE
+        }
+    }
+
+    // E ESTA FUNÇÃO TAMBÉM:
+    private fun showFullscreenImage(imageUrl: String, allImageUrls: List<String>, startPosition: Int) {
+        // Vamos usar a versão SIMPLES primeiro (sem ViewPager)
+        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_fullscreen_image) // Use o layout simples
+
+        val imageView = dialog.findViewById<android.widget.ImageView>(R.id.fullscreenImageView)
+        val progressBar = dialog.findViewById<android.widget.ProgressBar>(R.id.fullscreenProgressBar)
+        val closeButton = dialog.findViewById<android.widget.ImageButton>(R.id.closeButton)
+
+        // Carrega a imagem
+        progressBar.visibility = android.view.View.VISIBLE
+        imageView.load(imageUrl) {
+            crossfade(true)
+            listener(
+                onSuccess = { _, _ ->
+                    progressBar.visibility = android.view.View.GONE
+                },
+                onError = { _, _ ->
+                    progressBar.visibility = android.view.View.GONE
+                    imageView.setImageResource(R.drawable.screenshot_placeholder)
+                }
+            )
+        }
+
+        // Fecha o dialog ao clicar no botão X
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Fecha o dialog ao clicar na imagem
+        imageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Fecha o dialog ao pressionar back
+        dialog.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                dialog.dismiss()
+                true
+            } else {
+                false
+            }
+        }
+
+        dialog.show()
+    }
+
+    // ... (o resto do seu código existente permanece igual)
     private fun checkPermissionAndStartDownload() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val packageManager = packageManager
@@ -108,14 +172,13 @@ class AppDetailActivity : AppCompatActivity() {
     }
 
     private fun showRequestPermissionDialog() {
-        AlertDialog.Builder(this)
+        android.app.AlertDialog.Builder(this)
             .setTitle(getString(R.string.install_dialog_title))
             .setMessage(getString(R.string.install_dialog_message))
             .setPositiveButton(getString(R.string.install_dialog_positive_button)) { _, _ ->
                 val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
                     data = Uri.parse(String.format("package:%s", packageName))
                 }
-                // Usa a nova Activity Result API
                 requestInstallPermissionLauncher.launch(intent)
             }
             .setNegativeButton(getString(R.string.install_dialog_negative_button), null)
@@ -176,37 +239,15 @@ class AppDetailActivity : AppCompatActivity() {
 
         try {
             startActivity(installIntent)
-            // Chamada para salvar o registro de instalação (agora salva a versão)
             saveInstalledApp(currentApp)
         } catch (e: Exception) {
             Toast.makeText(this, "Não foi possível iniciar a instalação.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun showInstallDialog() {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.install_dialog_title))
-            .setMessage(getString(R.string.install_dialog_message))
-            .setPositiveButton(getString(R.string.install_dialog_positive_button)) { _, _ ->
-                showFinalInstallStep()
-            }
-            .setNegativeButton(getString(R.string.install_dialog_negative_button), null)
-            .show()
-    }
-
-    private fun showFinalInstallStep() {
-        val message = getString(R.string.final_dialog_message, currentApp.name)
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.final_dialog_title))
-            .setMessage(message)
-            .setPositiveButton(getString(R.string.final_dialog_ok_button), null)
-            .show()
-    }
-
     private fun saveInstalledApp(app: App) {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
-        // Salva a versão que a loja instalou, usando o nome do app como chave
         editor.putString(app.name, app.version)
         editor.apply()
     }
@@ -218,9 +259,7 @@ class AppDetailActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // Verifica se o app está instalado no sistema E se foi instalado por esta loja (versão compatível)
     private fun isAppInstalledByStore(app: App): Boolean {
-        // 1. Verifica se o app está instalado no sistema
         val isInstalledOnDevice = try {
             packageManager.getPackageInfo(app.packageName, 0)
             true
@@ -230,18 +269,14 @@ class AppDetailActivity : AppCompatActivity() {
 
         if (!isInstalledOnDevice) return false
 
-        // 2. Verifica se a loja registrou a instalação
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val registeredVersion = prefs.getString(app.name, null)
 
-        // Se a versão registrada for igual à versão atual do app na loja, consideramos que foi instalado pela loja
         return registeredVersion == app.version
     }
 
     private fun uninstallApp() {
         val intent = Intent(Intent.ACTION_DELETE).apply {
-            // O nome do pacote real do app deve ser usado aqui.
-            // Assumindo que currentApp.packageName contém o nome do pacote (ex: com.example.app)
             data = Uri.fromParts("package", currentApp.packageName, null)
         }
         startActivity(intent)

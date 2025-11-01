@@ -16,8 +16,8 @@ android {
         applicationId = "com.minimalistappstore"
         minSdk = 28
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.2.2"
+        versionCode = 7
+        versionName = "1.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,4 +59,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx.v277)
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("io.coil-kt:coil:2.5.0")
+
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
 }

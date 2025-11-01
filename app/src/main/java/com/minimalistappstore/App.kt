@@ -14,5 +14,6 @@ data class App(
     var apkUrl: String = "",
     var version: String = "",
     var openSourceUrl: String = "",
-    var packageName: String = ""
+    var packageName: String = "",
+    var screenshotUrls: List<String> = emptyList()
 ) : Parcelable

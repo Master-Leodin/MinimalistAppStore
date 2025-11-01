@@ -92,6 +92,24 @@
                 app:backgroundTint="#E94560"
                 android:textColor="#1A1A2E" />
 
+            <TextView
+                android:id="@+id/screenshotsTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Screenshots"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="#EAEAEA"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/screenshotsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="24dp"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
