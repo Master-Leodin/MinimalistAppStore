@@ -1,4 +1,3 @@
-// Website.kt
 package com.minimalistappstore
 
 import android.os.Parcelable
@@ -10,5 +9,6 @@ import kotlinx.serialization.Serializable
 data class Website(
     val name: String,
     val description: String,
+    var iconUrl: String,
     val url: String
 ) : Parcelable

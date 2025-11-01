@@ -4,37 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:layout_marginBottom="12dp">
+    android:layout_marginBottom="12dp"
+    android:gravity="top"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/methodNameTextView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center|start"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="#EAEAEA"
         tools:text="PayPal Email" />
 
-    <TextView
-        android:id="@+id/methodValueTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:layout_marginStart="8dp"
-        android:fontFamily="monospace"
-        android:textSize="12sp"
-        android:textColor="#B8B8D1"
-        tools:text="leonardo132@gmail.com" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|start"
+        android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/copyButton"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_save"
-        android:contentDescription="Copy to clipboard"
-        app:tint="#E94560" />
+        <TextView
+            android:id="@+id/methodValueTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="monospace"
+            android:textColor="#B8B8D1"
+            android:textSize="12sp"
+            tools:text="leonardo132@gmail.com" />
+
+        <ImageButton
+            android:id="@+id/copyButton"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Copy to clipboard"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            app:tint="#E94560" />
+    </LinearLayout>
 
 </LinearLayout>

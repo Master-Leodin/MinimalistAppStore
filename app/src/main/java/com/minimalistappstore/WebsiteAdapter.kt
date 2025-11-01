@@ -1,18 +1,19 @@
-// WebsiteAdapter.kt
 package com.minimalistappstore
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.minimalistappstore.databinding.ListItemAppBinding
 
 class WebsiteAdapter(private val websites: List<Website>) :
     RecyclerView.Adapter<WebsiteAdapter.WebsiteViewHolder>() {
+
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WebsiteViewHolder {
         val binding = ListItemAppBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,18 +27,44 @@ class WebsiteAdapter(private val websites: List<Website>) :
     override fun getItemCount(): Int = websites.size
 
     inner class WebsiteViewHolder(private val binding: ListItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(website: Website) {
-            // Usamos um ícone de globo genérico para sites
-            binding.appIconImageView.load("https://i.imgur.com/gKd5h2S.png" )
-            binding.appNameTextView.text = website.name
 
-            // CORREÇÃO: Exibe a descrição do site no campo developerNameTextView
+        private var currentRetryCount = 0
+        private val maxRetries = 2
+        private val retryDelay = 2000L
+
+        fun bind(website: Website) {
+            loadWebsiteIconWithRetry(website.iconUrl)
+
+            binding.appNameTextView.text = website.name
             binding.developerNameTextView.text = website.description
 
             binding.root.setOnClickListener {
-                // Cria um Intent para abrir a URL no navegador
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(website.url))
                 it.context.startActivity(intent)
+            }
+        }
+
+        private fun loadWebsiteIconWithRetry(iconUrl: String) {
+            binding.appIconImageView.load(iconUrl) {
+                crossfade(true)
+                // Placeholder genérico para websites
+                placeholder(R.drawable.ic_websites)
+                // Fallback se não carregar
+                error(R.drawable.ic_websites)
+
+                listener(
+                    onError = { _, result ->
+                        if (currentRetryCount < maxRetries) {
+                            currentRetryCount++
+                            handler.postDelayed({
+                                loadWebsiteIconWithRetry(iconUrl)
+                            }, retryDelay)
+                        }
+                    },
+                    onSuccess = { _, _ ->
+                        currentRetryCount = 0 // Reset no sucesso
+                    }
+                )
             }
         }
     }
