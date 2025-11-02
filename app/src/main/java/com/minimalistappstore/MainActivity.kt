@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var updateApkFile: File? = null
+    private var updateDialog: AlertDialog? = null // Referência para o diálogo de atualização
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,53 +88,88 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
-            .setCancelable(false)
+            .setCancelable(false) // Impede que o usuário feche clicando fora
             .create()
+
+        updateDialog = dialog // Guarda a referência do diálogo
 
         dialogBinding.releaseNotesTextView.text = version.releaseNotes
 
         // Configura o botão de atualização para download interno
         dialogBinding.updateButton.setOnClickListener {
-            dialog.dismiss()
-            startUpdateDownload(version.apkUrl)
+            startUpdateDownload(version.apkUrl, dialogBinding)
         }
 
         // Configura o botão "Mais tarde"
         dialogBinding.laterButton.setOnClickListener {
             dialog.dismiss()
+            updateDialog = null
         }
 
         dialog.show()
     }
 
-    private fun startUpdateDownload(apkUrl: String) {
-        // Mostrar progresso (opcional - você pode adicionar uma barra de progresso no diálogo)
+    private fun startUpdateDownload(apkUrl: String, dialogBinding: DialogUpdateAvailableBinding) {
+        // Desabilita os botões e mostra o loading
+        dialogBinding.updateButton.isEnabled = false
+        dialogBinding.laterButton.isEnabled = false
+        dialogBinding.updateButton.text = "Baixando..."
+        dialogBinding.updateProgressBar.visibility = android.view.View.VISIBLE
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val url = URL(apkUrl)
                 val connection = url.openConnection()
                 connection.connect()
+
+                val contentLength = connection.contentLength
                 val inputStream = connection.getInputStream()
 
                 // Cria arquivo temporário no cache
                 val apkFile = File(cacheDir, "MinimalistAppStore_update.apk")
                 val outputStream = FileOutputStream(apkFile)
 
+                var totalBytesRead = 0
+                val buffer = ByteArray(8 * 1024) // 8KB buffer
+                var bytesRead: Int
+
                 inputStream.use { input ->
                     outputStream.use { output ->
-                        input.copyTo(output)
+                        while (input.read(buffer).also { bytesRead = it } != -1) {
+                            output.write(buffer, 0, bytesRead)
+                            totalBytesRead += bytesRead
+
+                            // Atualiza o progresso (opcional)
+                            if (contentLength > 0) {
+                                val progress = (totalBytesRead * 100 / contentLength).toInt()
+                                withContext(Dispatchers.Main) {
+                                    dialogBinding.updateProgressBar.progress = progress
+                                }
+                            }
+                        }
                     }
                 }
 
                 updateApkFile = apkFile
 
                 withContext(Dispatchers.Main) {
+                    // Esconde a barra de progresso e restaura o botão
+                    dialogBinding.updateProgressBar.visibility = android.view.View.GONE
+                    dialogBinding.updateButton.text = "Instalar"
+                    dialogBinding.updateButton.isEnabled = true
+                    dialogBinding.laterButton.isEnabled = true
+
                     triggerUpdateInstallation(apkFile)
                 }
 
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Mostrar erro para o usuário
+                    // Restaura a UI em caso de erro
+                    dialogBinding.updateProgressBar.visibility = android.view.View.GONE
+                    dialogBinding.updateButton.text = "Tentar Novamente"
+                    dialogBinding.updateButton.isEnabled = true
+                    dialogBinding.laterButton.isEnabled = true
+
                     android.widget.Toast.makeText(
                         this@MainActivity,
                         "Erro no download da atualização: ${e.message}",
@@ -159,6 +195,9 @@ class MainActivity : AppCompatActivity() {
 
         try {
             startActivity(installIntent)
+            // Fecha o diálogo após iniciar a instalação
+            updateDialog?.dismiss()
+            updateDialog = null
         } catch (e: Exception) {
             android.widget.Toast.makeText(
                 this,
@@ -171,6 +210,7 @@ class MainActivity : AppCompatActivity() {
     // Limpar arquivo temporário quando necessário
     override fun onDestroy() {
         updateApkFile?.delete()
+        updateDialog?.dismiss()
         super.onDestroy()
     }
 }
