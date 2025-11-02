@@ -1,4 +1,3 @@
-// DonationAdapter.kt
 package com.minimalistappstore
 
 import android.content.ClipData
@@ -6,15 +5,15 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.minimalistappstore.databinding.ListItemDonationBinding
 import com.minimalistappstore.databinding.ItemDonationMethodBinding
 
@@ -23,7 +22,6 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DonationViewHolder {
         val binding = ListItemDonationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        // CORREÇÃO CHAVE: Passamos o contexto do 'parent' para o ViewHolder
         return DonationViewHolder(binding, parent.context)
     }
 
@@ -42,12 +40,12 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
             binding.methodsContainer.removeAllViews()
 
-            // CORREÇÃO CHAVE: Usamos a variável 'context' que recebemos no construtor
             val methodsAdapter = DonationMethodsAdapter(option.methods, context)
-            binding.methodsContainer.addView(RecyclerView(context).apply {
+            val methodsRecyclerView = RecyclerView(context).apply {
                 adapter = methodsAdapter
                 layoutManager = LinearLayoutManager(context)
-            })
+            }
+            binding.methodsContainer.addView(methodsRecyclerView)
         }
     }
 
@@ -58,7 +56,7 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MethodViewHolder {
             val binding = ItemDonationMethodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return MethodViewHolder(binding)
+            return MethodViewHolder(binding, context)
         }
 
         override fun onBindViewHolder(holder: MethodViewHolder, position: Int) {
@@ -67,8 +65,19 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
 
         override fun getItemCount(): Int = methods.size
 
-        inner class MethodViewHolder(private val binding: ItemDonationMethodBinding) : RecyclerView.ViewHolder(binding.root) {
+        inner class MethodViewHolder(
+            private val binding: ItemDonationMethodBinding,
+            private val context: Context
+        ) : RecyclerView.ViewHolder(binding.root) {
+
+            private var currentRetryCount = 0
+            private val maxRetries = 2
+            private val retryDelay = 2000L
+            private val handler = Handler(Looper.getMainLooper())
+
             fun bind(method: DonationMethod) {
+                loadMethodIconWithRetry(method.iconUrl)
+
                 binding.methodNameTextView.text = method.name
                 binding.methodValueTextView.text = method.value
 
@@ -81,8 +90,7 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
                         method.value
                     }
 
-                    // CORREÇÃO CHAVE: Usamos a variável 'context' aqui também
-                    val clipboard = context.getSystemService(ClipboardManager::class.java)
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("Donation Info", valueToCopy)
                     clipboard.setPrimaryClip(clip)
 
@@ -94,9 +102,35 @@ class DonationAdapter(private val donationOptions: List<DonationOption>) :
                 }
             }
 
+            private fun loadMethodIconWithRetry(iconUrl: String) {
+                binding.methodIconImageView.load(iconUrl) {
+                    crossfade(true)
+                    placeholder(android.R.drawable.ic_menu_help)
+                    error(android.R.drawable.ic_menu_help)
+
+                    listener(
+                        onError = { _, result ->
+                            if (currentRetryCount < maxRetries) {
+                                currentRetryCount++
+                                handler.postDelayed({
+                                    loadMethodIconWithRetry(iconUrl)
+                                }, retryDelay)
+                            }
+                        },
+                        onSuccess = { _, _ ->
+                            currentRetryCount = 0
+                        }
+                    )
+                }
+            }
+
             private fun openLink(url: String) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                context.startActivity(intent)
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    context.startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Não foi possível abrir o link", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

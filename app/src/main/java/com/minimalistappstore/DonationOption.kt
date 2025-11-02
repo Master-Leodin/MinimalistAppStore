@@ -19,5 +19,6 @@ data class DonationOption(
 data class DonationMethod(
     val name: String,
     val value: String,
-    val type: String
+    val type: String,
+    val iconUrl: String
 ) : Parcelable
