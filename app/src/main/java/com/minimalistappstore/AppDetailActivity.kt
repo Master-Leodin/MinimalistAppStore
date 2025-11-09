@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,9 @@ class AppDetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setupUI()
+
+        // DEBUG: Verificar se o app está registrado após retornar da instalação
+        debugAppRegistration()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +59,17 @@ class AppDetailActivity : AppCompatActivity() {
         }
 
         setupUI()
-        setupScreenshots() // Esta linha estava faltando!
+        setupScreenshots()
+
+        // DEBUG: Botão temporário para forçar registro
+        binding.downloadButton.setOnLongClickListener {
+            Log.d("AppDetailActivity", "🔄 FORÇANDO REGISTRO MANUAL...")
+            forceRegisterForTesting()
+            Toast.makeText(this, "Registro forçado para teste", Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        debugAppInfo()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -106,13 +120,12 @@ class AppDetailActivity : AppCompatActivity() {
 
     private fun showFullscreenImage(imageUrl: String, allImageUrls: List<String>, startPosition: Int) {
         val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
-        dialog.setContentView(R.layout.dialog_fullscreen_image) // Use o layout simples
+        dialog.setContentView(R.layout.dialog_fullscreen_image)
 
         val imageView = dialog.findViewById<android.widget.ImageView>(R.id.fullscreenImageView)
         val progressBar = dialog.findViewById<android.widget.ProgressBar>(R.id.fullscreenProgressBar)
         val closeButton = dialog.findViewById<android.widget.ImageButton>(R.id.closeButton)
 
-        // Carrega a imagem
         progressBar.visibility = android.view.View.VISIBLE
         imageView.load(imageUrl) {
             crossfade(true)
@@ -127,17 +140,14 @@ class AppDetailActivity : AppCompatActivity() {
             )
         }
 
-        // Fecha o dialog ao clicar no botão X
         closeButton.setOnClickListener {
             dialog.dismiss()
         }
 
-        // Fecha o dialog ao clicar na imagem
         imageView.setOnClickListener {
             dialog.dismiss()
         }
 
-        // Fecha o dialog ao pressionar back
         dialog.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
                 dialog.dismiss()
@@ -150,7 +160,6 @@ class AppDetailActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // ... (o resto do seu código existente permanece igual)
     private fun checkPermissionAndStartDownload() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val packageManager = packageManager
@@ -233,28 +242,75 @@ class AppDetailActivity : AppCompatActivity() {
         }
 
         try {
-            startActivity(installIntent)
+            // CORREÇÃO: Salvar ANTES de iniciar a instalação
             saveInstalledApp(currentApp)
+            Log.d("AppDetailActivity", "✅ App registrado ANTES da instalação: ${currentApp.packageName}")
+
+            startActivity(installIntent)
+            Log.d("AppDetailActivity", "🚀 Instalação iniciada para: ${currentApp.packageName}")
         } catch (e: Exception) {
             Toast.makeText(this, "Não foi possível iniciar a instalação.", Toast.LENGTH_SHORT).show()
+            Log.e("AppDetailActivity", "❌ Erro ao iniciar instalação", e)
         }
     }
 
     private fun saveInstalledApp(app: App) {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
-        editor.putString(app.name, app.version)
+
+        // CORREÇÃO: Usar a versão correta do app (a que está sendo instalada)
+        editor.putString(app.packageName, app.version)
         editor.apply()
+
+        Log.d("AppDetailActivity", "💾 APP SALVO NO REGISTRO:")
+        Log.d("AppDetailActivity", "   Package: ${app.packageName}")
+        Log.d("AppDetailActivity", "   Versão: ${app.version}")
+        Log.d("AppDetailActivity", "   Nome: ${app.name}")
+
+        // Verificação imediata
+        val savedVersion = prefs.getString(app.packageName, "NÃO_ENCONTRADO")
+        Log.d("AppDetailActivity", "   ✅ Confirmado no SharedPreferences: $savedVersion")
+
+        // Listar TODOS os apps registrados para debug
+        val allEntries = prefs.all
+        Log.d("AppDetailActivity", "=== TODOS OS APPS REGISTRADOS ===")
+        if (allEntries.isEmpty()) {
+            Log.d("AppDetailActivity", "   ❌ NENHUM APP REGISTRADO AINDA!")
+        } else {
+            for ((key, value) in allEntries) {
+                Log.d("AppDetailActivity", "   📱 $key -> $value")
+            }
+        }
+    }
+
+    // CORREÇÃO: Adicionar método para forçar registro manual (para teste)
+    private fun forceRegisterForTesting() {
+        val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+
+        // Registrar o app atual com versão anterior para simular atualização
+        editor.putString(currentApp.packageName, "0.2") // Versão anterior
+        editor.apply()
+
+        Log.d("AppDetailActivity", "🧪 REGISTRO FORÇADO PARA TESTE:")
+        Log.d("AppDetailActivity", "   Package: ${currentApp.packageName}")
+        Log.d("AppDetailActivity", "   Versão: 0.2 (anterior)")
+
+        // Verificar se salvou
+        val saved = prefs.getString(currentApp.packageName, "NÃO_SALVOU")
+        Log.d("AppDetailActivity", "   ✅ Verificação: $saved")
     }
 
     private fun removeInstalledApp(app: App) {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
-        editor.remove(app.name)
+        editor.remove(app.packageName)
         editor.apply()
+        Log.d("AppDetailActivity", "🗑️ APP REMOVIDO DO REGISTRO: ${app.packageName}")
     }
 
     private fun isAppInstalledByStore(app: App): Boolean {
+        // Primeiro verifica se o app está instalado no dispositivo
         val isInstalledOnDevice = try {
             packageManager.getPackageInfo(app.packageName, 0)
             true
@@ -262,10 +318,20 @@ class AppDetailActivity : AppCompatActivity() {
             false
         }
 
-        if (!isInstalledOnDevice) return false
+        if (!isInstalledOnDevice) {
+            Log.d("AppDetailActivity", "🔍 App NÃO está instalado no dispositivo: ${app.packageName}")
+            return false
+        }
 
+        // Depois verifica se está registrado no SharedPreferences
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
-        val registeredVersion = prefs.getString(app.name, null)
+        val registeredVersion = prefs.getString(app.packageName, null)
+
+        Log.d("AppDetailActivity", "🔍 Verificando app no registro:")
+        Log.d("AppDetailActivity", "   Package: ${app.packageName}")
+        Log.d("AppDetailActivity", "   Versão registrada: $registeredVersion")
+        Log.d("AppDetailActivity", "   Versão atual: ${app.version}")
+        Log.d("AppDetailActivity", "   Está registrado? ${registeredVersion == app.version}")
 
         return registeredVersion == app.version
     }
@@ -275,5 +341,39 @@ class AppDetailActivity : AppCompatActivity() {
             data = Uri.fromParts("package", currentApp.packageName, null)
         }
         startActivity(intent)
+    }
+
+    // MÉTODOS DEBUG ADICIONAIS
+    private fun debugAppInfo() {
+        Log.d("AppDetailActivity", "=== DEBUG APP INFO ===")
+        Log.d("AppDetailActivity", "Nome: ${currentApp.name}")
+        Log.d("AppDetailActivity", "Package: ${currentApp.packageName}")
+        Log.d("AppDetailActivity", "Versão: ${currentApp.version}")
+
+        try {
+            val packageInfo = packageManager.getPackageInfo(currentApp.packageName, 0)
+            Log.d("AppDetailActivity", "✅ INSTALADO - VersionCode: ${packageInfo.longVersionCode}, VersionName: ${packageInfo.versionName}")
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.d("AppDetailActivity", "❌ NÃO INSTALADO")
+        }
+    }
+
+    private fun debugAppRegistration() {
+        val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        val allEntries = prefs.all
+
+        Log.d("AppDetailActivity", "=== DEBUG REGISTRO ONRESUME ===")
+        if (allEntries.isEmpty()) {
+            Log.d("AppDetailActivity", "NENHUM APP REGISTRADO NO SHAREDPREFERENCES!")
+        } else {
+            for ((key, value) in allEntries) {
+                Log.d("AppDetailActivity", "📱 $key -> $value")
+            }
+        }
+
+        // Verificar especificamente o app atual
+        val currentAppRegistered = prefs.getString(currentApp.packageName, null)
+        Log.d("AppDetailActivity", "App atual registrado? ${currentAppRegistered != null}")
+        Log.d("AppDetailActivity", "Valor registrado: $currentAppRegistered")
     }
 }
