@@ -7,13 +7,14 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 data class App(
-    var name: String = "",
-    var developer: String = "",
-    var description: String = "",
-    var iconUrl: String = "",
-    var apkUrl: String = "",
-    var version: String = "",
-    var openSourceUrl: String = "",
-    var packageName: String = "",
-    var screenshotUrls: List<String> = emptyList()
+    val name: String = "",
+    val developer: String = "",
+    val description: String = "",
+    val iconUrl: String = "",
+    val apkUrl: String = "",
+    val version: String = "",
+    val latestVersionCode: Int = 0,
+    val openSourceUrl: String = "",
+    val packageName: String = "",
+    val screenshotUrls: List<String> = emptyList()
 ) : Parcelable
