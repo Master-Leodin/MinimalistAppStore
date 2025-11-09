@@ -8,8 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
 import android.widget.Toast
@@ -86,7 +84,6 @@ class AppDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ADICIONE ESTA FUNÇÃO QUE ESTAVA FALTANDO:
     private fun setupScreenshots() {
         val screenshotUrls = currentApp.screenshotUrls
 
@@ -107,9 +104,7 @@ class AppDetailActivity : AppCompatActivity() {
         }
     }
 
-    // E ESTA FUNÇÃO TAMBÉM:
     private fun showFullscreenImage(imageUrl: String, allImageUrls: List<String>, startPosition: Int) {
-        // Vamos usar a versão SIMPLES primeiro (sem ViewPager)
         val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.dialog_fullscreen_image) // Use o layout simples
 
