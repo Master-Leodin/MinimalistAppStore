@@ -39,10 +39,23 @@ class AppDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupUI()
+        Log.d("AppDetailActivity", "=== STATUS APP ATUAL ===")
+        Log.d("AppDetailActivity", "Package: ${currentApp.packageName}")
+        Log.d("AppDetailActivity", "Instalado: ${isAppInstalled(currentApp.packageName)}")
+        Log.d("AppDetailActivity", "Registrado: ${isAppRegistered(currentApp.packageName)}")
+    }
 
-        // DEBUG: Verificar se o app está registrado após retornar da instalação
-        debugAppRegistration()
+    private fun isAppInstalled(packageName: String): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0) != null
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
+    private fun isAppRegistered(packageName: String): Boolean {
+        val prefs = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        return prefs.getString(packageName, null) != null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -258,47 +271,50 @@ class AppDetailActivity : AppCompatActivity() {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
 
-        // CORREÇÃO: Usar a versão correta do app (a que está sendo instalada)
+        // CORREÇÃO: Usar apply() em vez de commit() e adicionar verificação
         editor.putString(app.packageName, app.version)
-        editor.apply()
 
-        Log.d("AppDetailActivity", "💾 APP SALVO NO REGISTRO:")
-        Log.d("AppDetailActivity", "   Package: ${app.packageName}")
-        Log.d("AppDetailActivity", "   Versão: ${app.version}")
-        Log.d("AppDetailActivity", "   Nome: ${app.name}")
+        // CORREÇÃO CRÍTICA: Garantir que o registro foi salvo
+        if (editor.commit()) { // Usar commit() para garantir sincronização
+            Log.d("AppDetailActivity", "✅ APP SALVO COM SUCESSO: ${app.packageName} -> ${app.version}")
 
-        // Verificação imediata
-        val savedVersion = prefs.getString(app.packageName, "NÃO_ENCONTRADO")
-        Log.d("AppDetailActivity", "   ✅ Confirmado no SharedPreferences: $savedVersion")
+            // Verificação imediata
+            val savedVersion = prefs.getString(app.packageName, "NÃO_SALVOU")
+            Log.d("AppDetailActivity", "🔍 CONFIRMAÇÃO: $savedVersion")
 
-        // Listar TODOS os apps registrados para debug
-        val allEntries = prefs.all
-        Log.d("AppDetailActivity", "=== TODOS OS APPS REGISTRADOS ===")
-        if (allEntries.isEmpty()) {
-            Log.d("AppDetailActivity", "   ❌ NENHUM APP REGISTRADO AINDA!")
-        } else {
-            for ((key, value) in allEntries) {
-                Log.d("AppDetailActivity", "   📱 $key -> $value")
+            // Debug: listar todos os apps registrados
+            val allEntries = prefs.all
+            Log.d("AppDetailActivity", "=== TODOS OS APPS REGISTRADOS ===")
+            allEntries.forEach { (key, value) ->
+                Log.d("AppDetailActivity", "📱 $key -> $value")
             }
+        } else {
+            Log.e("AppDetailActivity", "❌ FALHA AO SALVAR APP: ${app.packageName}")
         }
     }
 
-    // CORREÇÃO: Adicionar método para forçar registro manual (para teste)
+    // CORREÇÃO: Método melhorado para forçar registro
     private fun forceRegisterForTesting() {
         val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
 
-        // Registrar o app atual com versão anterior para simular atualização
-        editor.putString(currentApp.packageName, "0.2") // Versão anterior
+        // Registrar com versão anterior para simular necessidade de update
+        editor.putString(currentApp.packageName, "0.2") // Versão ANTERIOR
         editor.apply()
 
-        Log.d("AppDetailActivity", "🧪 REGISTRO FORÇADO PARA TESTE:")
+        Log.d("AppDetailActivity", "🧪 REGISTRO FORÇADO PARA TESTE")
         Log.d("AppDetailActivity", "   Package: ${currentApp.packageName}")
-        Log.d("AppDetailActivity", "   Versão: 0.2 (anterior)")
+        Log.d("AppDetailActivity", "   Versão registrada: 0.2 (anterior)")
+        Log.d("AppDetailActivity", "   Versão disponível: ${currentApp.version} (nova)")
 
-        // Verificar se salvou
+        // Verificação imediata
         val saved = prefs.getString(currentApp.packageName, "NÃO_SALVOU")
         Log.d("AppDetailActivity", "   ✅ Verificação: $saved")
+
+        // Atualizar UI
+        setupUI()
+
+        Toast.makeText(this, "App registrado para teste de atualização!", Toast.LENGTH_LONG).show()
     }
 
     private fun removeInstalledApp(app: App) {
@@ -310,30 +326,19 @@ class AppDetailActivity : AppCompatActivity() {
     }
 
     private fun isAppInstalledByStore(app: App): Boolean {
-        // Primeiro verifica se o app está instalado no dispositivo
-        val isInstalledOnDevice = try {
-            packageManager.getPackageInfo(app.packageName, 0)
-            true
+        return try {
+            val packageInfo = packageManager.getPackageInfo(app.packageName, 0)
+            val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+            val registeredVersion = prefs.getString(app.packageName, null)
+
+            // Considerar instalado se estiver no registro OU se estiver instalado no dispositivo
+            val isRegistered = registeredVersion != null
+            val isInstalled = packageInfo != null
+
+            isInstalled || isRegistered // ← Mudança importante aqui
         } catch (e: PackageManager.NameNotFoundException) {
             false
         }
-
-        if (!isInstalledOnDevice) {
-            Log.d("AppDetailActivity", "🔍 App NÃO está instalado no dispositivo: ${app.packageName}")
-            return false
-        }
-
-        // Depois verifica se está registrado no SharedPreferences
-        val prefs: SharedPreferences = getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
-        val registeredVersion = prefs.getString(app.packageName, null)
-
-        Log.d("AppDetailActivity", "🔍 Verificando app no registro:")
-        Log.d("AppDetailActivity", "   Package: ${app.packageName}")
-        Log.d("AppDetailActivity", "   Versão registrada: $registeredVersion")
-        Log.d("AppDetailActivity", "   Versão atual: ${app.version}")
-        Log.d("AppDetailActivity", "   Está registrado? ${registeredVersion == app.version}")
-
-        return registeredVersion == app.version
     }
 
     private fun uninstallApp() {

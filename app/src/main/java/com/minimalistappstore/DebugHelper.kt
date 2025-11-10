@@ -22,6 +22,7 @@ object DebugHelper {
         Log.d("DebugHelper", "=== FIM DEBUG COMPLETO ===")
     }
 
+    // DebugHelper.kt - CORREÇÃO CRÍTICA
     private fun debugSharedPreferences(context: Context) {
         val prefs = context.getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
         val allEntries = prefs.all
@@ -34,16 +35,44 @@ object DebugHelper {
                 Log.d("DebugHelper", "📱 App: $key")
                 Log.d("DebugHelper", "   Versão registrada: $value")
 
-                // Verifica se o app está realmente instalado
+                // CORREÇÃO: Não remover automaticamente - apenas verificar
                 try {
                     val packageInfo = context.packageManager.getPackageInfo(key, 0)
                     Log.d("DebugHelper", "   ✅ INSTALADO - VersionCode: ${packageInfo.longVersionCode}, VersionName: ${packageInfo.versionName}")
                 } catch (e: PackageManager.NameNotFoundException) {
-                    Log.d("DebugHelper", "   ❌ NÃO INSTALADO - Remover do registro")
-                    // Remove automaticamente
-                    prefs.edit().remove(key).apply()
+                    Log.d("DebugHelper", "   ⚠️ NÃO INSTALADO - Mantendo registro (pode ser delay de detecção)")
+                    // REMOVIDO: prefs.edit().remove(key).apply()
                 }
             }
+        }
+    }
+
+    // Em DebugHelper.kt
+    fun cleanupNonInstalledApps(context: Context) {
+        val prefs = context.getSharedPreferences("installed_apps", Context.MODE_PRIVATE)
+        val allEntries = prefs.all
+        val editor = prefs.edit()
+
+        var removedCount = 0
+        for ((key, value) in allEntries) {
+            try {
+                context.packageManager.getPackageInfo(key, 0)
+            } catch (e: PackageManager.NameNotFoundException) {
+                // Verificação dupla com delay
+                Thread.sleep(100)
+                try {
+                    context.packageManager.getPackageInfo(key, 0)
+                } catch (e2: PackageManager.NameNotFoundException) {
+                    editor.remove(key)
+                    removedCount++
+                    Log.d("DebugHelper", "🗑️ Removido app não instalado: $key")
+                }
+            }
+        }
+
+        if (removedCount > 0) {
+            editor.apply()
+            Log.d("DebugHelper", "✅ Removidos $removedCount apps não instalados")
         }
     }
 

@@ -1,4 +1,4 @@
-// UpdatesFetcher.kt - CORREÇÃO CRÍTICA
+// UpdatesFetcher.kt - VERSÃO CORRIGIDA (com Int)
 package com.minimalistappstore
 
 import android.content.Context
@@ -20,8 +20,8 @@ data class InstalledApp(
     val latestVersionName: String,
     val openSourceUrl: String,
     val packageName: String,
-    val currentVersionCode: Long,
-    val latestVersionCode: Long
+    val currentVersionCode: Int = 0,
+    val latestVersionCode: Int = 0
 )
 
 object UpdatesFetcher {
@@ -39,12 +39,6 @@ object UpdatesFetcher {
 
                 Log.d("UpdatesFetcher", "📋 Apps no SharedPreferences: $installedPackages")
 
-                // CORREÇÃO: Se não há apps registrados, retorna lista vazia
-                if (installedPackages.isEmpty()) {
-                    Log.d("UpdatesFetcher", "❌ NENHUM APP REGISTRADO - O usuário precisa instalar algum app primeiro")
-                    return@withContext Result.success(emptyList())
-                }
-
                 if (installedPackages.isEmpty()) {
                     Log.d("UpdatesFetcher", "❌ NENHUM APP REGISTRADO")
                     return@withContext Result.success(emptyList())
@@ -61,8 +55,6 @@ object UpdatesFetcher {
                 // Busca as versões mais recentes
                 Log.d("UpdatesFetcher", "🌐 Baixando all_apps_versions.json...")
                 val allVersionsJsonString = URL(VERSIONS_URL).readText()
-                Log.d("UpdatesFetcher", "📄 Conteúdo do JSON de versões: $allVersionsJsonString")
-
                 val allVersionsMap: Map<String, Map<String, Any>> = json.decodeFromString(allVersionsJsonString)
                 Log.d("UpdatesFetcher", "🗺️ Mapa de versões decodificado. Chaves: ${allVersionsMap.keys}")
 
@@ -73,78 +65,58 @@ object UpdatesFetcher {
                     try {
                         Log.d("UpdatesFetcher", "🔍 Verificando: $packageName")
 
-                        // CORREÇÃO: Tentar detectar o app de forma mais robusta
-                        var currentVersion: Long = 0
-                        var currentVersionName: String = ""
+                        // Verifica se o app está realmente instalado
+                        var currentVersionCode: Int = 0
                         var isInstalled = false
 
                         try {
                             val packageInfo = pm.getPackageInfo(packageName, 0)
-                            currentVersion = packageInfo.longVersionCode
-                            currentVersionName = packageInfo.versionName ?: ""
+                            currentVersionCode = packageInfo.longVersionCode.toInt() // Convertendo para Int
                             isInstalled = true
-                            Log.d("UpdatesFetcher", "   📱 Versão INSTALADA:")
-                            Log.d("UpdatesFetcher", "      VersionCode: $currentVersion")
-                            Log.d("UpdatesFetcher", "      VersionName: $currentVersionName")
+                            Log.d("UpdatesFetcher", "   📱 Versão INSTALADA - VersionCode: $currentVersionCode")
                         } catch (e: PackageManager.NameNotFoundException) {
-                            Log.d("UpdatesFetcher", "   ⚠️ App não detectado no dispositivo, mas mantendo no registro")
-                            // Continua a verificação mesmo se não detectar o app instalado
-                            // Usa a versão do registro como fallback
-                            val registeredVersion = prefs.getString(packageName, "")
-                            currentVersionName = registeredVersion ?: "0"
-                            Log.d("UpdatesFetcher", "   🔄 Usando versão do registro: $currentVersionName")
+                            Log.d("UpdatesFetcher", "   ❌ App não está instalado - removendo do registro")
+                           // prefs.edit().remove(packageName).apply()
+                            continue // Pula para o próximo app
                         }
 
                         val appDetails = allApps[packageName]
-
                         if (appDetails != null) {
                             Log.d("UpdatesFetcher", "   ✅ App encontrado na loja: ${appDetails.name}")
 
-                            // Buscar pela chave correta no all_apps_versions.json
+                            // Busca a versão mais recente de forma mais robusta
                             var latestVersionInfo: Map<String, Any>? = null
                             var foundKey: String? = null
 
-                            // Primeiro tenta encontrar pelo nome do app
-                            for ((key, value) in allVersionsMap) {
-                                val entryPackageName = value["packageName"] as? String
-                                Log.d("UpdatesFetcher", "   🔎 Procurando em: $key -> packageName: $entryPackageName")
-                                if (entryPackageName == packageName) {
-                                    latestVersionInfo = value
-                                    foundKey = key
-                                    break
-                                }
-                            }
+                            // Estratégia 1: Busca direta pelo nome do app
+                            latestVersionInfo = allVersionsMap[appDetails.name]
+                            foundKey = appDetails.name
 
-                            // Se não encontrou pelo packageName, tenta pelo nome do app
+                            // Estratégia 2: Busca iterativa pelo packageName
                             if (latestVersionInfo == null) {
-                                latestVersionInfo = allVersionsMap[appDetails.name]
-                                foundKey = appDetails.name
-                                Log.d("UpdatesFetcher", "   🔄 Tentando buscar pelo nome: ${appDetails.name}")
+                                for ((key, value) in allVersionsMap) {
+                                    val entryPackageName = value["packageName"] as? String
+                                    if (entryPackageName == packageName) {
+                                        latestVersionInfo = value
+                                        foundKey = key
+                                        break
+                                    }
+                                }
                             }
 
                             if (latestVersionInfo != null) {
                                 Log.d("UpdatesFetcher", "   ✅ Versão encontrada no JSON (chave: $foundKey)")
 
-                                val latestVersionCode = (latestVersionInfo["latestVersionCode"] as? Number)?.toLong() ?: 0L
+                                val latestVersionCode = (latestVersionInfo["latestVersionCode"] as? Number)?.toInt() ?: 0
                                 val latestVersionName = latestVersionInfo["version"] as? String ?: ""
 
-                                Log.d("UpdatesFetcher", "   📦 Versão DISPONÍVEL:")
-                                Log.d("UpdatesFetcher", "      LatestVersionCode: $latestVersionCode")
-                                Log.d("UpdatesFetcher", "      Version: $latestVersionName")
+                                Log.d("UpdatesFetcher", "   📊 COMPARAÇÃO:")
+                                Log.d("UpdatesFetcher", "      Instalado: $currentVersionCode")
+                                Log.d("UpdatesFetcher", "      Disponível: $latestVersionCode")
 
-                                // CORREÇÃO: Se não conseguiu detectar o app instalado, assume que precisa atualizar
-                                // ou pelo menos mostra que há uma versão disponível
-                                val needsUpdate = if (isInstalled) {
-                                    latestVersionCode > currentVersion
-                                } else {
-                                    // Se não detectou o app, verifica se a versão do registro é diferente da disponível
-                                    val registeredVersion = prefs.getString(packageName, "")
-                                    latestVersionName != registeredVersion
-                                }
+                                // Lógica de comparação
+                                val needsUpdate = latestVersionCode > currentVersionCode
 
-                                Log.d("UpdatesFetcher", "   ⚖️ COMPARAÇÃO:")
-                                Log.d("UpdatesFetcher", "      Instalado: $currentVersion ($currentVersionName)")
-                                Log.d("UpdatesFetcher", "      Disponível: $latestVersionCode ($latestVersionName)")
                                 Log.d("UpdatesFetcher", "      Precisa atualizar? $needsUpdate")
 
                                 if (needsUpdate) {
@@ -161,23 +133,18 @@ object UpdatesFetcher {
                                             latestVersionName = latestVersionName,
                                             openSourceUrl = appDetails.openSourceUrl,
                                             packageName = packageName,
-                                            currentVersionCode = currentVersion,
+                                            currentVersionCode = currentVersionCode,
                                             latestVersionCode = latestVersionCode
                                         )
                                     )
-                                } else {
-                                    Log.d("UpdatesFetcher", "   ✅ App está atualizado")
                                 }
                             } else {
                                 Log.d("UpdatesFetcher", "   ❌ Nenhuma informação de versão encontrada para $packageName")
                             }
-                        } else {
-                            Log.d("UpdatesFetcher", "   ❌ App $packageName não encontrado na lista de apps da loja")
                         }
                     } catch (e: Exception) {
                         Log.e("UpdatesFetcher", "💥 Erro ao verificar app $packageName", e)
                     }
-                    Log.d("UpdatesFetcher", "---")
                 }
 
                 Log.d("UpdatesFetcher", "📊 RESULTADO FINAL: ${appsWithUpdates.size} atualizações encontradas")

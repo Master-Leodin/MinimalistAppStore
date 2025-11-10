@@ -66,8 +66,9 @@ class UpdatesFragment : Fragment() {
                 } catch (e: Exception) {
                     Log.d("UpdatesFragment", "   ⚠️ NÃO DETECTADO NO DISPOSITIVO - MAS MANTENDO REGISTRO")
                     // CORREÇÃO: Não remover automaticamente - pode ser um problema de detecção
-                }
-            }
+                } catch (e: Exception) {
+                    Log.d("UpdatesFragment", "   ⚠️ NÃO DETECTADO NO DISPOSITIVO - MANTENDO REGISTRO")
+            }}
         }
     }
 

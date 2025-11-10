@@ -37,13 +37,19 @@ class AppsFragment : Fragment() {
     }
 
     private fun loadApps() {
-        lifecycleScope.launch {
+        // CORREÇÃO: Usar viewLifecycleOwner para evitar crashes
+        viewLifecycleOwner.lifecycleScope.launch {
             val result = AppFetcher.fetchApps()
             result.onSuccess { apps ->
-                val adapter = AppAdapter(requireContext(), apps)
-                binding.appsRecyclerView.adapter = adapter
+                // CORREÇÃO: Verificar se o binding ainda está vivo
+                if (_binding != null) {
+                    val adapter = AppAdapter(requireContext(), apps)
+                    binding.appsRecyclerView.adapter = adapter
+                }
             }.onFailure { error ->
-                Toast.makeText(requireContext(), "Erro ao carregar apps: ${error.message}", Toast.LENGTH_LONG).show()
+                if (_binding != null) {
+                    Toast.makeText(requireContext(), "Erro ao carregar apps: ${error.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
