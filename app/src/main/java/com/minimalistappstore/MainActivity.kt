@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupNavigation()
-        checkForAppUpdate()
+        checkForAppUpdate() // MANTER: Checagem de atualização da própria loja
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.nav_apps
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
+        // Configuração para as 4 abas: APPs, Jogos, Websites, Doações
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_apps, R.id.nav_games, R.id.nav_websites, R.id.nav_donate),
             binding.drawerLayout
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         return navController?.navigateUp(appBarConfiguration) ?: super.onSupportNavigateUp()
     }
 
+    // MANTER: Lógica de checagem de atualização da própria loja
     private fun checkForAppUpdate() {
         lifecycleScope.launch {
             val updateInfo = VersionChecker.checkForUpdate(this@MainActivity)
@@ -141,8 +143,8 @@ class MainActivity : AppCompatActivity() {
 
                             // Atualiza o progresso (opcional)
                             if (contentLength > 0) {
-                                val progress = (totalBytesRead * 100 / contentLength).toInt()
                                 withContext(Dispatchers.Main) {
+                                    val progress = (totalBytesRead * 100 / contentLength).toInt()
                                     dialogBinding.updateProgressBar.progress = progress
                                 }
                             }
