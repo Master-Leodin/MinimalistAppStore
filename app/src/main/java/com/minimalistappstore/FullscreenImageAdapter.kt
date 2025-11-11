@@ -1,5 +1,6 @@
 package com.minimalistappstore
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,8 @@ import com.minimalistappstore.databinding.ItemFullscreenImageBinding
 
 class FullscreenImageAdapter(private val imageUrls: List<String>) :
     RecyclerView.Adapter<FullscreenImageAdapter.FullscreenImageViewHolder>() {
+
+    private val TAG = "FullscreenImageAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FullscreenImageViewHolder {
         val binding = ItemFullscreenImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,14 +27,27 @@ class FullscreenImageAdapter(private val imageUrls: List<String>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(imageUrl: String) {
+            Log.d(TAG, "Carregando imagem: $imageUrl")
+
             binding.fullscreenImage.load(imageUrl) {
                 crossfade(true)
-                error(R.drawable.screenshot_placeholder)
-            }
-
-            // Fecha ao clicar na imagem (se estiver usando o layout simples)
-            binding.fullscreenImage.setOnClickListener {
-                // O dismiss é tratado no dialog
+                // Usar um placeholder enquanto carrega
+                placeholder(android.R.drawable.ic_menu_gallery)
+                // Usar um ícone de erro visível
+                error(android.R.drawable.ic_dialog_alert)
+                listener(
+                    onStart = {
+                        Log.d(TAG, "Iniciando carregamento: $imageUrl")
+                    },
+                    onSuccess = { _, _ ->
+                        Log.d(TAG, "Imagem carregada com sucesso: $imageUrl")
+                    },
+                    onError = { _, result ->
+                        Log.e(TAG, "Erro ao carregar imagem: $imageUrl - ${result.throwable.message}")
+                        // Forçar um ícone de erro visível
+                        binding.fullscreenImage.setImageResource(android.R.drawable.ic_dialog_alert)
+                    }
+                )
             }
         }
     }
