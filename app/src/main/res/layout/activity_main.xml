@@ -20,9 +20,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name"
             app:titleTextColor="#EAEAEA"
-            app:navigationIconTint="#E94560" />
+            app:theme="@style/ToolbarTheme" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

@@ -41,6 +41,20 @@ class AppDetailActivity : AppCompatActivity() {
 
         setupUI()
         setupScreenshots()
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.apply {
+            title = currentApp.name
+            setDisplayHomeAsUpEnabled(true)
+        }
+
+// FORÇAR A COR DO BOTÃO VOLTAR - VERSÃO CORRIGIDA
+        val upArrow = androidx.appcompat.content.res.AppCompatResources.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        upArrow?.let {
+            val tintColor = android.graphics.Color.parseColor("#E94560")
+            it.setTint(tintColor)
+            supportActionBar?.setHomeAsUpIndicator(it)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

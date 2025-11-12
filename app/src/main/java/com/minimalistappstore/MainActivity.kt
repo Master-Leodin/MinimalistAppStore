@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var updateApkFile: File? = null
-    private var updateDialog: AlertDialog? = null // Referência para o diálogo de atualização
+    private var updateDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +38,27 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupNavigation()
-        checkForAppUpdate() // MANTER: Checagem de atualização da própria loja
+        checkForAppUpdate()
+        setupToolbar()
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.nav_apps
+        }
+
+        fun setupToolbar() {
+            setSupportActionBar(binding.toolbar)
+
+            // SOLUÇÃO SIMPLES - APENAS DEFINIR O ÍCONE E A COR
+            binding.toolbar.setNavigationIcon(R.drawable.ic_menu) // Use seu ícone de menu aqui
+            binding.toolbar.navigationIcon?.setTint(getColor(R.color.white)) // Ou a cor que quiser
+
+            binding.toolbar.setNavigationOnClickListener {
+                if (binding.drawerLayout.isDrawerOpen(binding.navigationView)) {
+                    binding.drawerLayout.closeDrawer(binding.navigationView)
+                } else {
+                    binding.drawerLayout.openDrawer(binding.navigationView)
+                }
+            }
         }
     }
 
