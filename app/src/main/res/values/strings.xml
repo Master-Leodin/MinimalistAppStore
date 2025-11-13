@@ -1,51 +1,49 @@
 <resources>
-    <string name="app_name">Lojinha Minimalista</string>
-    <string name="main_title">Lojinha Minimalista</string>
-    <string name="download_button">Baixar e Instalar</string>
-    <string name="downloading_button">Baixando...</string>
-    <string name="install_button">Instalar</string>
-    <string name="version_label">Versão %s</string>
+    <string name="app_name">Minimalist App Store</string>
+    <string name="main_title">Minimalist App Store</string>
+    <string name="download_button">Download and Install</string>
+    <string name="downloading_button">Downloading...</string>
+    <string name="install_button">Install</string>
+    <string name="version_label">Version %s</string>
 
-    <!-- Strings para o diálogo de instalação -->
-    <string name="install_dialog_title">Instalação Manual Necessária</string>
-    <string name="install_dialog_message">Para sua segurança, apps de fora da Play Store exigem uma etapa extra.\n\n1. Após clicar em \'OK\', você será redirecionado para as Configurações.\n2. Ative a permissão para \"Permitir instalação de apps desconhecidos\" para esta fonte.\n3. Volte para o app e toque em \'Instalar\' novamente.</string>
-    <string name="install_dialog_positive_button">OK, entendi</string>
-    <string name="install_dialog_negative_button">Cancelar</string>
+    <!-- Strings for the installation dialog -->
+    <string name="install_dialog_title">Manual Installation Required</string>
+    <string name="install_dialog_message">For your security, apps from outside the Play Store require an extra step.\n\n1. After clicking \'OK\', you will be redirected to Settings.\n2. Enable the permission to \"Allow installation of apps from this source\".\n3. Return to the app and tap \'Install\' again.</string>
+    <string name="install_dialog_positive_button">OK, I understand</string>
+    <string name="install_dialog_negative_button">Cancel</string>
 
-    <!-- Strings para o diálogo final -->
-    <string name="final_dialog_title">Pronto para Instalar!</string>
-    <string name="final_dialog_message">Agora o app %1$s seria instalado. Em um cenário real, o arquivo APK baixado seria aberto pelo sistema Android.</string>
-    <string name="final_dialog_ok_button">Entendido</string>
-    <string name="icone_do_app">Ícone do App</string>
-    <string name="descri_o_detalhada_do_aplicativo_aqui">Descrição detalhada do aplicativo aqui.</string>
-    <string name="nome_do_app">Nome do App</string>
-    <string name="nome_do_desenvolvedor">Desenvolvedor: Leon</string>
+    <!-- Strings for the final dialog -->
+    <string name="final_dialog_title">Ready to Install!</string>
+    <string name="final_dialog_message">The app %1$s would now be installed. In a real scenario, the downloaded APK file would be opened by the Android system.</string>
+    <string name="final_dialog_ok_button">Understood</string>
+    <string name="icone_do_app">App Icon</string>
+    <string name="descri_o_detalhada_do_aplicativo_aqui">Detailed description of the application here.</string>
+    <string name="nome_do_app">App Name</string>
+    <string name="nome_do_desenvolvedor">Developer: Leon</string>
 
-    <!-- Conteúdo dos Apps -->
-    <string name="app_btc_profits_name">Lucros BTC</string>
-    <string name="app_btc_profits_description">Uma ferramenta de finanças pessoais para entusiastas de Bitcoin. O aplicativo permite que você registre suas compras de Bitcoin e veja instantaneamente seu valor atual, acompanhando seu lucro ou prejuízo ao longo do tempo. O aplicativo está disponível em português, inglês e espanhol.</string>
+    <!-- App Content -->
+    <string name="app_btc_profits_name">BTC Profits</string>
+    <string name="app_btc_profits_description">A personal finance tool for Bitcoin enthusiasts. The app allows you to log your Bitcoin purchases and instantly see their current value, tracking your profit or loss over time. The app is available in Portuguese, English, and Spanish.</string>
 
     <string name="nav_apps">Apps</string>
-    <string name="nav_games">Jogos</string>
+    <string name="nav_games">Games</string>
     <string name="nav_websites">Websites</string>
-    <string name="nav_donate">Doações</string>
-    <string name="open_drawer">Abrir Menu</string>
-    <string name="close_drawer">Fechar Menu</string>
+    <string name="nav_donate">Donations</string>
+    <string name="open_drawer">Open Menu</string>
+    <string name="close_drawer">Close Menu</string>
 
     <string name="nav_header_desc">Navigation header</string>
-    <string name="nav_header_subtitle">master-leodin@protonmail.ch</string>
-
-    <string name="jogos_em_breve">Jogos em breve...</string>
-
+    <string name="nav_header_subtitle">minimalistappstore@example.com</string>
+    <string name="jogos_em_breve">Games coming soon...</string>
     <string name="website_cambodia_name">Cambodia Tech Hope</string>
-    <string name="website_cambodia_description">Um projeto de longo prazo para criar uma iniciativa sem fins lucrativos focada em treinar professores de TI no Camboja rural.</string>
+    <string name="website_cambodia_description">A long-term project to create a non-profit initiative focused on training IT teachers in rural Cambodia.</string>
 
     <string name="website_btcgamestore_name">BTC Game Store</string>
-    <string name="website_btcgamestore_description">Uma plataforma para distribuir jogos indie, com pagamentos integrados em Bitcoin para apoiar desenvolvedores diretamente.</string>
+    <string name="website_btcgamestore_description">A platform for distributing indie games, with integrated Bitcoin payments to directly support developers.</string>
 
-    <string name="website_leonardo_name">Leonardo - Aniquilado</string>
-    <string name="website_leonardo_description">A poderosa história de um desenvolvedor resiliente que luta contra barreiras sistêmicas, usando a tecnologia como arma para reconstruir sua vida.</string>
+    <string name="website_leonardo_name">Leonardo - Annihilated</string>
+    <string name="website_leonardo_description">The powerful story of a resilient developer who fights against systemic barriers, using technology as a weapon to rebuild his life.</string>
 
-    <string name="uninstall_button">Desinstalar APP</string>
+    <string name="uninstall_button">Uninstall APP</string>
 
 </resources>
