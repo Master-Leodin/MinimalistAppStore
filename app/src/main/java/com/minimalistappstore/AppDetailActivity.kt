@@ -35,20 +35,15 @@ class AppDetailActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
-            title = currentApp.name
+            // Usar o nome traduzido para o título
+            title = currentApp.getTranslatedName(this@AppDetailActivity)
             setDisplayHomeAsUpEnabled(true)
         }
 
         setupUI()
         setupScreenshots()
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.apply {
-            title = currentApp.name
-            setDisplayHomeAsUpEnabled(true)
-        }
-
-// FORÇAR A COR DO BOTÃO VOLTAR - VERSÃO CORRIGIDA
+        // FORÇAR A COR DO BOTÃO VOLTAR - VERSÃO CORRIGIDA
         val upArrow = androidx.appcompat.content.res.AppCompatResources.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         upArrow?.let {
             val tintColor = android.graphics.Color.parseColor("#E94560")
@@ -64,9 +59,11 @@ class AppDetailActivity : AppCompatActivity() {
 
     private fun setupUI() {
         binding.detailIconImageView.load(currentApp.iconUrl)
-        binding.detailNameTextView.text = currentApp.name
+
+        // CORREÇÃO: Usar as funções de tradução em vez das propriedades diretas
+        binding.detailNameTextView.text = currentApp.getTranslatedName(this)
         binding.detailVersionTextView.text = getString(R.string.version_label, currentApp.version)
-        binding.detailDescriptionTextView.text = currentApp.description
+        binding.detailDescriptionTextView.text = currentApp.getTranslatedDescription(this)
 
         binding.downloadButton.text = getString(R.string.download_button)
         binding.downloadButton.setOnClickListener {
@@ -169,7 +166,9 @@ class AppDetailActivity : AppCompatActivity() {
                 val contentLength = connection.contentLength
                 val inputStream = connection.getInputStream()
 
-                val apkFile = File(cacheDir, "${currentApp.name}_v${currentApp.version}.apk")
+                // CORREÇÃO: Usar nameKey para o nome do arquivo em vez de name
+                val fileName = currentApp.nameKey.replace("[^a-zA-Z0-9]".toRegex(), "_")
+                val apkFile = File(cacheDir, "${fileName}_v${currentApp.version}.apk")
                 val outputStream = FileOutputStream(apkFile)
 
                 var totalBytesRead = 0

@@ -1,4 +1,4 @@
-// AppAdapter.kt
+
 package com.minimalistappstore
 
 import android.content.Context
@@ -27,12 +27,14 @@ class AppAdapter(private val context: Context, private val apps: List<App>) :
     inner class AppViewHolder(private val binding: ListItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(app: App) {
             binding.appIconImageView.load(app.iconUrl)
-            binding.appNameTextView.text = app.name
+
+            // Usar as funções de tradução
+            binding.appNameTextView.text = app.getTranslatedName(context)
             binding.developerNameTextView.text = app.developer
 
             binding.root.setOnClickListener {
                 val intent = Intent(context, AppDetailActivity::class.java)
-                intent.putExtra("APP_EXTRA", app) // Passa o objeto App inteiro
+                intent.putExtra("APP_EXTRA", app)
                 context.startActivity(intent)
             }
         }

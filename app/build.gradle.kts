@@ -16,8 +16,8 @@ android {
         applicationId = "com.minimalistappstore"
         minSdk = 28
         targetSdk = 36
-        versionCode = 12
-        versionName = "1.4.2"
+        versionCode = 13
+        versionName = "1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -21,9 +21,15 @@
     <string name="nome_do_app">Nome do App</string>
     <string name="nome_do_desenvolvedor">Desenvolvedor: Leon</string>
 
-    <!-- Conteúdo dos Apps -->
+    <!-- App Names and Descriptions -->
     <string name="app_btc_profits_name">Lucros BTC</string>
     <string name="app_btc_profits_description">Uma ferramenta de finanças pessoais para entusiastas de Bitcoin. O aplicativo permite que você registre suas compras de Bitcoin e veja instantaneamente seu valor atual, acompanhando seu lucro ou prejuízo ao longo do tempo. O aplicativo está disponível em português, inglês e espanhol.</string>
+
+    <string name="app_todo_list_name">Lista de Tarefas (mais um)</string>
+    <string name="app_todo_list_description">Um bloco de notas simples onde você pode salvar arquivos no formato TXT e compartilhá-los entre dispositivos ou com familiares e amigos. O aplicativo está disponível em português, inglês e espanhol.</string>
+
+    <string name="app_financial_control_name">Controle Financeiro</string>
+    <string name="app_financial_control_description">Veja para onde seu dinheiro está indo. O aplicativo está disponível em português, inglês e espanhol.</string>
 
     <string name="nav_apps">Apps</string>
     <string name="nav_games">Jogos</string>

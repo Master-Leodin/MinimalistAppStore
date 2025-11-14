@@ -21,9 +21,15 @@
     <string name="nome_do_app">App Name</string>
     <string name="nome_do_desenvolvedor">Developer: Leon</string>
 
-    <!-- App Content -->
+    <!-- App Names and Descriptions -->
     <string name="app_btc_profits_name">BTC Profits</string>
     <string name="app_btc_profits_description">A personal finance tool for Bitcoin enthusiasts. The app allows you to log your Bitcoin purchases and instantly see their current value, tracking your profit or loss over time. The app is available in Portuguese, English, and Spanish.</string>
+
+    <string name="app_todo_list_name">Todo List (one more)</string>
+    <string name="app_todo_list_description">A simple notepad where you can save files in TXT format and share them between devices or with family and friends. The app is available in Portuguese, English, and Spanish.</string>
+
+    <string name="app_financial_control_name">Financial control</string>
+    <string name="app_financial_control_description">See where your money is going. The app is available in Portuguese, English, and Spanish.</string>
 
     <string name="nav_apps">Apps</string>
     <string name="nav_games">Games</string>
